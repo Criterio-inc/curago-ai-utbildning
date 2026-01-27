@@ -96,18 +96,13 @@ Insikten att AI-landskapet förändras snabbt och att kompetens behöver underh�
 
 | Format | Beskrivning | Frekvens |
 |--------|-------------|----------|
-| **AI-fika** | Informell träff för att dela erfarenheter | Varannan vecka |
+| **Share & Learn** | Informell träff för att dela erfarenheter | Varannan vecka |
 | **Case-delning** | Presentera hur AI användes i uppdrag | Månadsvis |
-| **Prompt-bibliotek** | Gemensam samling av beprövade promptar | Löpande |
-| **Dilemma-forum** | Diskutera svåra gränsdragningar | Vid behov |
+| **CurAIgo** | Gemensam samling av beprövade promptar och AI-tips | Löpande |
+| **Curagos Elevate** | Diskutera gränsdragningar och utmaningar | Vid behov |
 | **Gästföreläsning** | Bjud in externa experter | Kvartalsvis |
 
-#### Praktiska verktyg för delning
-
-- **Teams-kanal** eller Slack för AI-frågor och tips
-- **Delad mapp** med promptmallar och resurser
-- **Wiki eller Notion** för dokumenterad kunskap
-- **Regelbunden punkt på teammöten** för AI-erfarenheter
+> Det viktigaste är inte *var* delningen sker – utan *att* den sker. Använd de kanaler och forum som redan finns. Poängen är att erfarenheter delas, oavsett format.
 
 #### Vem tar ansvar?
 
