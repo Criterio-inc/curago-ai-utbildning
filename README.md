@@ -2,7 +2,7 @@
 
 En webbaserad utbildningsplattform för Curagos konsulter med fokus på AI-kompetens.
 
-## Kom igång
+## Kom igång nu bara! 
 
 ### Miljövariabler
 
