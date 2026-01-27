@@ -18,6 +18,7 @@ interface QuizViewProps {
   moduleTitle: string
   moduleNumber: number
   passingScore?: number
+  onComplete?: (score: number) => void
 }
 
 export default function QuizView({
@@ -25,6 +26,7 @@ export default function QuizView({
   moduleTitle,
   moduleNumber,
   passingScore = 70,
+  onComplete,
 }: QuizViewProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<(string | null)[]>(
@@ -79,6 +81,7 @@ export default function QuizView({
 
     setSaving(false)
     setShowResult(true)
+    onComplete?.(score)
   }
 
   const restartQuiz = () => {

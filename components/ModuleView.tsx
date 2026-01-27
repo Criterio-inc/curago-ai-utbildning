@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -19,8 +19,9 @@ import {
   GraduationCap,
   Wrench,
   Check,
+  Circle,
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { useModuleProgress } from '@/hooks/useProgress'
 import type { ParsedModule, Exercise } from '@/types/module-content'
 
 interface ModuleViewProps {
@@ -28,28 +29,51 @@ interface ModuleViewProps {
   allModules: ParsedModule[]
 }
 
-const resourceTypeIcons: Record<string, typeof FileText> = {
-  article: FileText,
-  video: Video,
-  course: GraduationCap,
-  tool: Wrench,
-}
+// ---------------------------------------------------------------------------
+// ExerciseCard — med "markera som gjord"
+// ---------------------------------------------------------------------------
 
-function ExerciseCard({ exercise }: { exercise: Exercise }) {
+function ExerciseCard({
+  exercise,
+  isCompleted,
+  onToggle,
+}: {
+  exercise: Exercise
+  isCompleted: boolean
+  onToggle: () => void
+}) {
   const [showSolution, setShowSolution] = useState(false)
 
   return (
-    <div className="bg-slate-50 rounded-lg border border-slate-200 p-5">
-      <div className="flex items-start justify-between mb-2">
-        <h4 className="font-medium text-slate-900">{exercise.title}</h4>
-        {exercise.duration && (
-          <span className="text-xs bg-white px-2 py-1 rounded-full text-slate-500 border border-slate-200 flex-shrink-0 ml-2">
-            {exercise.duration}
-          </span>
-        )}
+    <div className={`rounded-lg border p-5 transition-colors ${
+      isCompleted ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'
+    }`}>
+      <div className="flex items-start gap-3 mb-2">
+        <button
+          onClick={onToggle}
+          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${
+            isCompleted
+              ? 'bg-green-500 border-green-500 text-white'
+              : 'border-slate-300 hover:border-curago-500'
+          }`}
+        >
+          {isCompleted && <Check className="w-3 h-3" />}
+        </button>
+        <div className="flex-1">
+          <div className="flex items-start justify-between">
+            <h4 className={`font-medium ${isCompleted ? 'text-green-800' : 'text-slate-900'}`}>
+              {exercise.title}
+            </h4>
+            {exercise.duration && (
+              <span className="text-xs bg-white px-2 py-1 rounded-full text-slate-500 border border-slate-200 flex-shrink-0 ml-2">
+                {exercise.duration}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="text-sm text-slate-600 space-y-2">
+      <div className="ml-8 text-sm text-slate-600 space-y-2">
         {exercise.body.split('\n\n').map((paragraph, i) => (
           <div key={i}>
             {paragraph.split('\n').map((line, j) => {
@@ -76,22 +100,13 @@ function ExerciseCard({ exercise }: { exercise: Exercise }) {
       </div>
 
       {exercise.solution && (
-        <div className="mt-4">
+        <div className="ml-8 mt-4">
           <button
             onClick={() => setShowSolution(!showSolution)}
             className="text-sm text-curago-600 hover:text-curago-700 font-medium flex items-center gap-1"
           >
-            {showSolution ? (
-              <>
-                <ChevronUp className="w-4 h-4" />
-                Dölj svar
-              </>
-            ) : (
-              <>
-                <ChevronDown className="w-4 h-4" />
-                Visa svar
-              </>
-            )}
+            {showSolution ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            {showSolution ? 'Dölj svar' : 'Visa svar'}
           </button>
           {showSolution && (
             <div className="mt-3 p-3 bg-white rounded-lg border border-curago-200 text-sm text-slate-600">
@@ -106,58 +121,77 @@ function ExerciseCard({ exercise }: { exercise: Exercise }) {
   )
 }
 
+// ---------------------------------------------------------------------------
+// SectionCheckbox — markera som läst
+// ---------------------------------------------------------------------------
+
+function SectionReadToggle({
+  isRead,
+  onToggle,
+  label,
+}: {
+  isRead: boolean
+  onToggle: () => void
+  label: string
+}) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${
+        isRead
+          ? 'bg-green-100 text-green-700 hover:bg-green-200'
+          : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+      }`}
+    >
+      {isRead ? <CheckCircle className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+      {label}
+    </button>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// ModuleProgressBar
+// ---------------------------------------------------------------------------
+
+function ModuleProgressBar({ percentage }: { percentage: number }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div
+          className="bg-curago-600 h-full rounded-full transition-all duration-500"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <span className="text-sm font-medium text-slate-600 min-w-[40px] text-right">
+        {percentage}%
+      </span>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// ModuleView
+// ---------------------------------------------------------------------------
+
 export default function ModuleView({ module, allModules }: ModuleViewProps) {
-  const [completed, setCompleted] = useState(false)
-  const [saving, setSaving] = useState(false)
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
+
+  const {
+    summary,
+    saving,
+    toggleSection,
+    toggleExercise,
+    markModuleCompleted,
+    isSectionRead,
+    isExerciseCompleted,
+  } = useModuleProgress(module.moduleNumber, module)
 
   const currentIndex = allModules.findIndex(m => m.moduleNumber === module.moduleNumber)
   const prevModule = currentIndex > 0 ? allModules[currentIndex - 1] : null
   const nextModule = currentIndex < allModules.length - 1 ? allModules[currentIndex + 1] : null
   const moduleId = `modul-${module.moduleNumber}`
 
-  useEffect(() => {
-    const fetchProgress = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-
-      if (user) {
-        const { data: moduleProgress } = await supabase
-          .from('user_progress')
-          .select('completed')
-          .eq('user_id', user.id)
-          .eq('module_id', moduleId)
-          .single()
-
-        if (moduleProgress) {
-          setCompleted(moduleProgress.completed)
-        }
-      }
-    }
-
-    fetchProgress()
-  }, [moduleId])
-
-  const markAsCompleted = async () => {
-    setSaving(true)
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (user) {
-      await supabase.from('user_progress').upsert({
-        user_id: user.id,
-        module_id: moduleId,
-        completed: true,
-        completed_at: new Date().toISOString(),
-      }, {
-        onConflict: 'user_id,module_id',
-      })
-
-      setCompleted(true)
-    }
-
-    setSaving(false)
-  }
-
-  const toggleSection = (key: string) => {
+  const toggleExpand = (key: string) => {
     setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
@@ -177,9 +211,9 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              completed ? 'bg-green-100 text-green-600' : 'bg-curago-100 text-curago-600'
+              summary.moduleCompleted ? 'bg-green-100 text-green-600' : 'bg-curago-100 text-curago-600'
             }`}>
-              {completed ? (
+              {summary.moduleCompleted ? (
                 <CheckCircle className="w-6 h-6" />
               ) : (
                 <span className="text-lg font-bold">{module.moduleNumber}</span>
@@ -201,6 +235,18 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
               <Clock className="w-4 h-4" />
               {module.metadata.estimatedTime} min
             </div>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        <div className="mb-4">
+          <ModuleProgressBar percentage={summary.percentage} />
+          <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+            <span>{summary.sectionsRead}/{summary.sectionsTotal} sektioner lästa</span>
+            <span>{summary.exercisesCompleted}/{summary.exercisesTotal} övningar gjorda</span>
+            {summary.quizCompleted && (
+              <span>Quiz: {summary.quizScore}%</span>
+            )}
           </div>
         </div>
 
@@ -226,10 +272,17 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {/* Key Concepts */}
       {module.keyConcepts.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-curago-600" />
-            Nyckelbegrepp
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-curago-600" />
+              Nyckelbegrepp
+            </h2>
+            <SectionReadToggle
+              isRead={isSectionRead('concepts')}
+              onToggle={() => toggleSection('concepts')}
+              label={isSectionRead('concepts') ? 'Läst' : 'Markera som läst'}
+            />
+          </div>
 
           <div className="space-y-4">
             {module.keyConcepts.map((concept, idx) => (
@@ -258,26 +311,38 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
           <div className="prose max-w-none">
             {module.contentSections.map((section) => {
               const sectionKey = `content-${section.number}`
-              const isExpanded = expandedSections[sectionKey] !== false // default open
+              const isExpanded = expandedSections[sectionKey] !== false
+              const isRead = isSectionRead(sectionKey)
 
               return (
                 <div key={section.number} className="mb-8 last:mb-0">
-                  <button
-                    onClick={() => toggleSection(sectionKey)}
-                    className="flex items-center gap-3 w-full text-left group mb-4"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-curago-100 text-curago-600 flex items-center justify-center flex-shrink-0 text-sm font-bold">
-                      {section.number}
-                    </div>
-                    <h2 className="text-xl font-semibold text-slate-800 group-hover:text-curago-600 transition-colors flex-1">
-                      {section.heading}
-                    </h2>
-                    {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-slate-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-slate-400" />
-                    )}
-                  </button>
+                  <div className="flex items-center gap-3 mb-4">
+                    <button
+                      onClick={() => toggleExpand(sectionKey)}
+                      className="flex items-center gap-3 flex-1 text-left group"
+                    >
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${
+                        isRead
+                          ? 'bg-green-100 text-green-600'
+                          : 'bg-curago-100 text-curago-600'
+                      }`}>
+                        {isRead ? <Check className="w-4 h-4" /> : section.number}
+                      </div>
+                      <h2 className="text-xl font-semibold text-slate-800 group-hover:text-curago-600 transition-colors flex-1">
+                        {section.heading}
+                      </h2>
+                      {isExpanded ? (
+                        <ChevronUp className="w-5 h-5 text-slate-400" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-slate-400" />
+                      )}
+                    </button>
+                    <SectionReadToggle
+                      isRead={isRead}
+                      onToggle={() => toggleSection(sectionKey)}
+                      label={isRead ? 'Läst' : 'Läs'}
+                    />
+                  </div>
 
                   {isExpanded && (
                     <div className="ml-11">
@@ -289,7 +354,6 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                             </h3>
                           )}
 
-                          {/* Tables */}
                           {sub.tables.map((table, tIdx) => (
                             <div key={tIdx} className="overflow-x-auto mb-4">
                               <table className="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
@@ -317,7 +381,6 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                             </div>
                           ))}
 
-                          {/* Prompt templates */}
                           {sub.promptTemplates.map((tmpl, pIdx) => (
                             <div key={pIdx} className="mb-4">
                               <p className="text-sm font-medium text-slate-700 mb-2">
@@ -329,13 +392,12 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                             </div>
                           ))}
 
-                          {/* Body text (excluding tables and prompt templates) */}
                           {sub.tables.length === 0 && sub.promptTemplates.length === 0 && (
                             <div className="text-sm text-slate-600 space-y-2">
                               {sub.body.split('\n').map((line, lIdx) => {
                                 const trimmed = line.trim()
                                 if (!trimmed) return null
-                                if (trimmed.startsWith('|')) return null // skip table rows
+                                if (trimmed.startsWith('|')) return null
                                 if (trimmed.startsWith('```')) return null
                                 if (trimmed.startsWith('> ')) {
                                   return (
@@ -381,10 +443,17 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {/* Practical Examples */}
       {module.practicalExamples.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-curago-600" />
-            Praktiska exempel
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              <Lightbulb className="w-5 h-5 text-curago-600" />
+              Praktiska exempel
+            </h2>
+            <SectionReadToggle
+              isRead={isSectionRead('examples')}
+              onToggle={() => toggleSection('examples')}
+              label={isSectionRead('examples') ? 'Läst' : 'Markera som läst'}
+            />
+          </div>
 
           <div className="space-y-4">
             {module.practicalExamples.map((example) => (
@@ -423,14 +492,24 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {/* Exercises */}
       {module.exercises.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <Target className="w-5 h-5 text-curago-600" />
-            Praktiska övningar
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              <Target className="w-5 h-5 text-curago-600" />
+              Praktiska övningar
+            </h2>
+            <span className="text-xs text-slate-500">
+              {summary.exercisesCompleted}/{summary.exercisesTotal} gjorda
+            </span>
+          </div>
 
           <div className="space-y-4">
             {module.exercises.map((exercise) => (
-              <ExerciseCard key={exercise.id} exercise={exercise} />
+              <ExerciseCard
+                key={exercise.id}
+                exercise={exercise}
+                isCompleted={isExerciseCompleted(exercise.id)}
+                onToggle={() => toggleExercise(exercise.id)}
+              />
             ))}
           </div>
         </div>
@@ -439,10 +518,17 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {/* Reflection Questions */}
       {module.reflectionQuestions.length > 0 && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-curago-600" />
-            Reflektionsfrågor
-          </h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-curago-600" />
+              Reflektionsfrågor
+            </h2>
+            <SectionReadToggle
+              isRead={isSectionRead('reflections')}
+              onToggle={() => toggleSection('reflections')}
+              label={isSectionRead('reflections') ? 'Läst' : 'Markera som läst'}
+            />
+          </div>
 
           <ol className="space-y-3">
             {module.reflectionQuestions.map((q, idx) => (
@@ -501,21 +587,27 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Quiz CTA */}
       {module.quiz.length > 0 && (
-        <div className="bg-curago-50 rounded-2xl border border-curago-200 p-6 mb-8">
+        <div className={`rounded-2xl border p-6 mb-8 ${
+          summary.quizCompleted
+            ? 'bg-green-50 border-green-200'
+            : 'bg-curago-50 border-curago-200'
+        }`}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-slate-900 mb-1">
-                Testa din kunskap
+                {summary.quizCompleted ? 'Quiz avklarat' : 'Testa din kunskap'}
               </h3>
               <p className="text-sm text-slate-600">
-                Frivilligt quiz med {module.quiz.length} frågor
+                {summary.quizCompleted
+                  ? `Resultat: ${summary.quizScore}% — ${module.quiz.length} frågor`
+                  : `Frivilligt quiz med ${module.quiz.length} frågor`}
               </p>
             </div>
             <Link
               href={`/utbildning/${moduleId}/quiz`}
               className="bg-curago-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-curago-700 transition-colors flex items-center gap-2"
             >
-              Starta quiz
+              {summary.quizCompleted ? 'Gör om' : 'Starta quiz'}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -538,11 +630,11 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       )}
 
       {/* Mark as Completed */}
-      {!completed && (
+      {!summary.moduleCompleted && (
         <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8 text-center">
-          <p className="text-slate-600 mb-4">Har du läst igenom modulen?</p>
+          <p className="text-slate-600 mb-4">Har du gått igenom modulen?</p>
           <button
-            onClick={markAsCompleted}
+            onClick={markModuleCompleted}
             disabled={saving}
             className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
           >

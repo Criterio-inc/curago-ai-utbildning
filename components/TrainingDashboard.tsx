@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import {
   Clock,
@@ -10,9 +9,9 @@ import {
   Target,
   FileText,
   Lightbulb,
+  BarChart3,
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
-import type { UserProgress } from '@/types'
+import { useTrainingProgress } from '@/hooks/useProgress'
 import type { ParsedModule } from '@/types/module-content'
 
 interface TrainingDashboardProps {
@@ -20,44 +19,12 @@ interface TrainingDashboardProps {
 }
 
 export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
-  const [progress, setProgress] = useState<UserProgress[]>([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchProgress = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-
-      if (user) {
-        const { data } = await supabase
-          .from('user_progress')
-          .select('module_id, completed, completed_at, quiz_score')
-          .eq('user_id', user.id)
-
-        if (data) {
-          setProgress(data.map(p => ({
-            moduleId: p.module_id,
-            completed: p.completed,
-            completedAt: p.completed_at,
-            quizScore: p.quiz_score,
-          })))
-        }
-      }
-
-      setLoading(false)
-    }
-
-    fetchProgress()
-  }, [])
-
-  const getModuleProgress = (moduleNumber: number) => {
-    return progress.find(p => p.moduleId === `modul-${moduleNumber}`)
-  }
-
-  const completedCount = progress.filter(p => p.completed).length
-  const totalModules = modules.length
-  const progressPercentage = totalModules > 0
-    ? Math.round((completedCount / totalModules) * 100)
-    : 0
+  const {
+    loading,
+    moduleSummaries,
+    trainingSummary,
+    getModuleSummary,
+  } = useTrainingProgress(modules)
 
   const totalTime = modules.reduce((sum, m) => sum + m.metadata.estimatedTime, 0)
   const totalQuizQuestions = modules.reduce((sum, m) => sum + m.quiz.length, 0)
@@ -69,32 +36,42 @@ export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">AI-utbildning</h1>
         <p className="text-slate-500 mb-6">
-          Curagos interna kompetenshöjning – {totalModules} moduler, ca {Math.round(totalTime / 60)} timmar
+          Curagos interna kompetenshöjning – {modules.length} moduler, ca {Math.round(totalTime / 60)} timmar
         </p>
 
+        {/* Main progress bar */}
         <div className="flex items-center gap-4 mb-4">
           <div className="flex-1 bg-slate-100 rounded-full h-4 overflow-hidden">
             <div
               className="bg-curago-600 h-full rounded-full transition-all duration-500"
-              style={{ width: `${progressPercentage}%` }}
+              style={{ width: `${trainingSummary.totalPercentage}%` }}
             />
           </div>
           <span className="text-lg font-semibold text-slate-900 min-w-[60px]">
-            {progressPercentage}%
+            {trainingSummary.totalPercentage}%
           </span>
         </div>
 
-        <p className="text-sm text-slate-500 mb-6">
-          {completedCount} av {totalModules} moduler avklarade
-        </p>
+        {/* Detailed stats */}
+        <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 mb-6">
+          <span>{trainingSummary.modulesCompleted} av {trainingSummary.totalModules} moduler avklarade</span>
+          <span className="text-slate-300">|</span>
+          <span>{trainingSummary.totalSectionsRead}/{trainingSummary.totalSections} sektioner lästa</span>
+          {trainingSummary.quizzesCompleted > 0 && (
+            <>
+              <span className="text-slate-300">|</span>
+              <span>{trainingSummary.quizzesCompleted} quiz gjorda (snitt {trainingSummary.averageQuizScore}%)</span>
+            </>
+          )}
+        </div>
 
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Stats cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="bg-slate-50 rounded-lg p-3 text-center">
             <div className="flex items-center justify-center gap-1 text-curago-600 mb-1">
               <FileText className="w-4 h-4" />
             </div>
-            <div className="text-lg font-semibold text-slate-900">{totalModules}</div>
+            <div className="text-lg font-semibold text-slate-900">{modules.length}</div>
             <div className="text-xs text-slate-500">Moduler</div>
           </div>
           <div className="bg-slate-50 rounded-lg p-3 text-center">
@@ -111,14 +88,22 @@ export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
             <div className="text-lg font-semibold text-slate-900">{totalExercises}</div>
             <div className="text-xs text-slate-500">Övningar</div>
           </div>
+          <div className="bg-slate-50 rounded-lg p-3 text-center">
+            <div className="flex items-center justify-center gap-1 text-curago-600 mb-1">
+              <BarChart3 className="w-4 h-4" />
+            </div>
+            <div className="text-lg font-semibold text-slate-900">{trainingSummary.totalSectionsRead}</div>
+            <div className="text-xs text-slate-500">Lästa sektioner</div>
+          </div>
         </div>
       </div>
 
       {/* Modules Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {modules.map((mod) => {
-          const moduleProgress = getModuleProgress(mod.moduleNumber)
-          const isCompleted = moduleProgress?.completed
+          const modSummary = getModuleSummary(mod.moduleNumber)
+          const isCompleted = modSummary?.moduleCompleted
+          const hasStarted = modSummary && modSummary.percentage > 0
 
           return (
             <Link
@@ -156,8 +141,36 @@ export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
                 {mod.metadata.subtitle}
               </p>
 
+              {/* Module progress bar */}
+              {modSummary && (
+                <div className="mt-3 mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-300 ${
+                          isCompleted ? 'bg-green-500' : 'bg-curago-500'
+                        }`}
+                        style={{ width: `${modSummary.percentage}%` }}
+                      />
+                    </div>
+                    <span className="text-xs font-medium text-slate-500 min-w-[32px] text-right">
+                      {modSummary.percentage}%
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-400">
+                    <span>{modSummary.sectionsRead}/{modSummary.sectionsTotal} sektioner</span>
+                    {modSummary.exercisesTotal > 0 && (
+                      <span>{modSummary.exercisesCompleted}/{modSummary.exercisesTotal} övningar</span>
+                    )}
+                    {modSummary.quizCompleted && (
+                      <span>Quiz {modSummary.quizScore}%</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Learning objectives preview */}
-              <div className="mt-3 mb-4">
+              <div className="mb-4">
                 <ul className="space-y-1">
                   {mod.learningObjectives.slice(0, 3).map((obj) => (
                     <li key={obj.id} className="text-xs text-slate-500 flex items-start gap-1.5">
@@ -178,32 +191,14 @@ export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
                 </ul>
               </div>
 
-              {/* Module stats */}
-              <div className="flex items-center gap-3 text-xs text-slate-400 mb-4">
-                {mod.quiz.length > 0 && (
-                  <span>{mod.quiz.length} quizfrågor</span>
-                )}
-                {mod.exercises.length > 0 && (
-                  <span>{mod.exercises.length} övningar</span>
-                )}
-                {mod.keyConcepts.length > 0 && (
-                  <span>{mod.keyConcepts.length} begrepp</span>
-                )}
-              </div>
-
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   {isCompleted ? (
                     <span className="text-sm text-green-600 font-medium">Avklarad</span>
-                  ) : moduleProgress ? (
+                  ) : hasStarted ? (
                     <span className="text-sm text-amber-600 font-medium">Påbörjad</span>
                   ) : (
                     <span className="text-sm text-slate-400">Ej påbörjad</span>
-                  )}
-                  {moduleProgress?.quizScore !== undefined && (
-                    <span className="text-xs bg-slate-100 px-2 py-1 rounded-full">
-                      Quiz: {moduleProgress.quizScore}%
-                    </span>
                   )}
                 </div>
                 <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-curago-600 transition-colors" />
@@ -236,7 +231,7 @@ export default function TrainingDashboard({ modules }: TrainingDashboardProps) {
           <div>
             <h3 className="font-medium text-slate-800 mb-2">Praktiska övningar</h3>
             <p className="text-sm text-slate-500">
-              Varje modul har övningar kopplade till verkliga arbetsuppgifter. Testa gärna med dina egna case.
+              Varje modul har övningar kopplade till verkliga arbetsuppgifter. Markera som gjorda när du testat.
             </p>
           </div>
           <div>
