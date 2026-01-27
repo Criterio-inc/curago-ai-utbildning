@@ -15,9 +15,6 @@ import {
   Lightbulb,
   MessageSquare,
   FileText,
-  Video,
-  GraduationCap,
-  Wrench,
   Check,
   Circle,
 } from 'lucide-react'
@@ -30,7 +27,7 @@ interface ModuleViewProps {
 }
 
 // ---------------------------------------------------------------------------
-// ExerciseCard — med "markera som gjord"
+// ExerciseCard
 // ---------------------------------------------------------------------------
 
 function ExerciseCard({
@@ -46,7 +43,9 @@ function ExerciseCard({
 
   return (
     <div className={`rounded-lg border p-5 transition-colors ${
-      isCompleted ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'
+      isCompleted
+        ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+        : 'bg-secondary border-border'
     }`}>
       <div className="flex items-start gap-3 mb-2">
         <button
@@ -54,18 +53,18 @@ function ExerciseCard({
           className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-colors ${
             isCompleted
               ? 'bg-green-500 border-green-500 text-white'
-              : 'border-slate-300 hover:border-curago-500'
+              : 'border-border hover:border-primary'
           }`}
         >
           {isCompleted && <Check className="w-3 h-3" />}
         </button>
         <div className="flex-1">
           <div className="flex items-start justify-between">
-            <h4 className={`font-medium ${isCompleted ? 'text-green-800' : 'text-slate-900'}`}>
+            <h4 className={`font-medium ${isCompleted ? 'text-green-800 dark:text-green-200' : 'text-foreground'}`}>
               {exercise.title}
             </h4>
             {exercise.duration && (
-              <span className="text-xs bg-white px-2 py-1 rounded-full text-slate-500 border border-slate-200 flex-shrink-0 ml-2">
+              <span className="text-xs bg-card px-2 py-1 rounded-full text-muted-foreground border border-border flex-shrink-0 ml-2">
                 {exercise.duration}
               </span>
             )}
@@ -73,13 +72,13 @@ function ExerciseCard({
         </div>
       </div>
 
-      <div className="ml-8 text-sm text-slate-600 space-y-2">
+      <div className="ml-8 text-sm text-muted-foreground space-y-2">
         {exercise.body.split('\n\n').map((paragraph, i) => (
           <div key={i}>
             {paragraph.split('\n').map((line, j) => {
               const trimmed = line.trim()
               if (trimmed.startsWith('**') && trimmed.endsWith('**')) {
-                return <p key={j} className="font-semibold text-slate-800 mt-2">{trimmed.replace(/\*\*/g, '')}</p>
+                return <p key={j} className="font-semibold text-foreground mt-2">{trimmed.replace(/\*\*/g, '')}</p>
               }
               if (trimmed.startsWith('- ')) {
                 return <li key={j} className="ml-4 list-disc">{trimmed.slice(2)}</li>
@@ -88,7 +87,7 @@ function ExerciseCard({
                 return <li key={j} className="ml-4 list-decimal">{trimmed.replace(/^\d+\.\s/, '')}</li>
               }
               if (trimmed.startsWith('*') && trimmed.endsWith('*')) {
-                return <p key={j} className="italic text-slate-500">{trimmed.replace(/\*/g, '')}</p>
+                return <p key={j} className="italic text-muted-foreground">{trimmed.replace(/\*/g, '')}</p>
               }
               if (trimmed) {
                 return <p key={j}>{trimmed}</p>
@@ -103,13 +102,13 @@ function ExerciseCard({
         <div className="ml-8 mt-4">
           <button
             onClick={() => setShowSolution(!showSolution)}
-            className="text-sm text-curago-600 hover:text-curago-700 font-medium flex items-center gap-1"
+            className="text-sm text-primary hover:underline font-medium flex items-center gap-1"
           >
             {showSolution ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             {showSolution ? 'Dölj svar' : 'Visa svar'}
           </button>
           {showSolution && (
-            <div className="mt-3 p-3 bg-white rounded-lg border border-curago-200 text-sm text-slate-600">
+            <div className="mt-3 p-3 bg-card rounded-lg border border-primary/20 text-sm text-muted-foreground">
               {exercise.solution.split('\n').map((line, i) => (
                 <p key={i} className="mb-1">{line}</p>
               ))}
@@ -122,7 +121,7 @@ function ExerciseCard({
 }
 
 // ---------------------------------------------------------------------------
-// SectionCheckbox — markera som läst
+// SectionReadToggle
 // ---------------------------------------------------------------------------
 
 function SectionReadToggle({
@@ -139,8 +138,8 @@ function SectionReadToggle({
       onClick={onToggle}
       className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full transition-colors ${
         isRead
-          ? 'bg-green-100 text-green-700 hover:bg-green-200'
-          : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
+          ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800'
+          : 'bg-muted text-muted-foreground hover:bg-accent'
       }`}
     >
       {isRead ? <CheckCircle className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
@@ -156,13 +155,13 @@ function SectionReadToggle({
 function ModuleProgressBar({ percentage }: { percentage: number }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
+      <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
         <div
-          className="bg-curago-600 h-full rounded-full transition-all duration-500"
+          className="bg-primary h-full rounded-full transition-all duration-500"
           style={{ width: `${percentage}%` }}
         />
       </div>
-      <span className="text-sm font-medium text-slate-600 min-w-[40px] text-right">
+      <span className="text-sm font-medium text-muted-foreground min-w-[40px] text-right">
         {percentage}%
       </span>
     </div>
@@ -200,18 +199,20 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {/* Breadcrumb */}
       <Link
         href="/utbildning"
-        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Tillbaka till översikten
       </Link>
 
       {/* Module Header */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+      <div className="bg-card rounded-2xl border border-border p-6 mb-8">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-              summary.moduleCompleted ? 'bg-green-100 text-green-600' : 'bg-curago-100 text-curago-600'
+              summary.moduleCompleted
+                ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
+                : 'bg-secondary text-primary'
             }`}>
               {summary.moduleCompleted ? (
                 <CheckCircle className="w-6 h-6" />
@@ -220,18 +221,18 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
               )}
             </div>
             <div>
-              <p className="text-sm text-slate-500">Del {module.moduleNumber} av {allModules.length}</p>
-              <h1 className="text-2xl font-bold text-slate-900">{module.metadata.title}</h1>
+              <p className="text-sm text-muted-foreground">Del {module.moduleNumber} av {allModules.length}</p>
+              <h1 className="text-2xl font-bold text-foreground">{module.metadata.title}</h1>
               {module.metadata.subtitle && (
-                <p className="text-sm text-slate-500 italic">{module.metadata.subtitle}</p>
+                <p className="text-sm text-muted-foreground italic">{module.metadata.subtitle}</p>
               )}
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
-            <span className="text-xs bg-slate-100 px-2 py-1 rounded-full text-slate-500">
+            <span className="text-xs bg-muted px-2 py-1 rounded-full text-muted-foreground">
               {module.metadata.type}
             </span>
-            <div className="flex items-center gap-1 text-sm text-slate-400">
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Clock className="w-4 h-4" />
               {module.metadata.estimatedTime} min
             </div>
@@ -241,7 +242,7 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         {/* Progress bar */}
         <div className="mb-4">
           <ModuleProgressBar percentage={summary.percentage} />
-          <div className="flex items-center gap-4 mt-2 text-xs text-slate-500">
+          <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
             <span>{summary.sectionsRead}/{summary.sectionsTotal} sektioner lästa</span>
             <span>{summary.exercisesCompleted}/{summary.exercisesTotal} övningar gjorda</span>
             {summary.quizCompleted && (
@@ -251,17 +252,17 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         </div>
 
         {/* Learning Objectives */}
-        <div className="bg-slate-50 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-slate-700 mb-2 flex items-center gap-2">
-            <Target className="w-4 h-4 text-curago-600" />
+        <div className="bg-secondary rounded-lg p-4">
+          <h3 className="text-sm font-medium text-foreground mb-2 flex items-center gap-2">
+            <Target className="w-4 h-4 text-primary" />
             Lärandemål
           </h3>
           <ul className="space-y-1.5">
             {module.learningObjectives.map((obj) => (
-              <li key={obj.id} className="text-sm text-slate-600 flex items-start gap-2">
-                <Check className="w-4 h-4 text-curago-600 mt-0.5 flex-shrink-0" />
+              <li key={obj.id} className="text-sm text-muted-foreground flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 <span>
-                  <span className="font-medium text-slate-700">{obj.verb}</span> {obj.description}
+                  <span className="font-medium text-foreground">{obj.verb}</span> {obj.description}
                 </span>
               </li>
             ))}
@@ -271,10 +272,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Key Concepts */}
       {module.keyConcepts.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-curago-600" />
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-primary" />
               Nyckelbegrepp
             </h2>
             <SectionReadToggle
@@ -286,14 +287,14 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
           <div className="space-y-4">
             {module.keyConcepts.map((concept, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-lg p-4">
-                <h4 className="font-semibold text-slate-900 mb-1">{concept.term}</h4>
-                <p className="text-sm text-slate-600">{concept.definition}</p>
+              <div key={idx} className="bg-secondary rounded-lg p-4">
+                <h4 className="font-semibold text-foreground mb-1">{concept.term}</h4>
+                <p className="text-sm text-muted-foreground">{concept.definition}</p>
                 {concept.details.length > 0 && (
                   <ul className="mt-2 space-y-1">
                     {concept.details.map((detail, i) => (
-                      <li key={i} className="text-sm text-slate-500 flex items-start gap-2">
-                        <span className="text-curago-500 mt-0.5">•</span>
+                      <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-0.5">&bull;</span>
                         {detail}
                       </li>
                     ))}
@@ -307,7 +308,7 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Main Content Sections */}
       {module.contentSections.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 mb-8">
+        <div className="bg-card rounded-2xl border border-border p-8 mb-8">
           <div className="prose max-w-none">
             {module.contentSections.map((section) => {
               const sectionKey = `content-${section.number}`
@@ -323,18 +324,18 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                     >
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${
                         isRead
-                          ? 'bg-green-100 text-green-600'
-                          : 'bg-curago-100 text-curago-600'
+                          ? 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
+                          : 'bg-secondary text-primary'
                       }`}>
                         {isRead ? <Check className="w-4 h-4" /> : section.number}
                       </div>
-                      <h2 className="text-xl font-semibold text-slate-800 group-hover:text-curago-600 transition-colors flex-1">
+                      <h2 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors flex-1">
                         {section.heading}
                       </h2>
                       {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-slate-400" />
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-slate-400" />
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </button>
                     <SectionReadToggle
@@ -349,18 +350,18 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                       {section.subsections.map((sub, subIdx) => (
                         <div key={subIdx} className="mb-6 last:mb-0">
                           {sub.heading && !sub.heading.startsWith('|') && !sub.heading.startsWith('**') && (
-                            <h3 className="text-lg font-medium text-slate-700 mb-3">
+                            <h3 className="text-lg font-medium text-foreground mb-3">
                               {sub.heading.replace(/\*\*/g, '')}
                             </h3>
                           )}
 
                           {sub.tables.map((table, tIdx) => (
                             <div key={tIdx} className="overflow-x-auto mb-4">
-                              <table className="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+                              <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
                                 <thead>
-                                  <tr className="bg-slate-50">
+                                  <tr className="bg-secondary">
                                     {table.headers.map((h, hIdx) => (
-                                      <th key={hIdx} className="text-left p-3 font-medium text-slate-700 border-b border-slate-200">
+                                      <th key={hIdx} className="text-left p-3 font-medium text-foreground border-b border-border">
                                         {h}
                                       </th>
                                     ))}
@@ -368,9 +369,9 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                                 </thead>
                                 <tbody>
                                   {table.rows.map((row, rIdx) => (
-                                    <tr key={rIdx} className="border-b border-slate-100 last:border-0">
+                                    <tr key={rIdx} className="border-b border-border/50 last:border-0">
                                       {table.headers.map((h, hIdx) => (
-                                        <td key={hIdx} className="p-3 text-slate-600">
+                                        <td key={hIdx} className="p-3 text-muted-foreground">
                                           {row[h]}
                                         </td>
                                       ))}
@@ -383,17 +384,17 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
                           {sub.promptTemplates.map((tmpl, pIdx) => (
                             <div key={pIdx} className="mb-4">
-                              <p className="text-sm font-medium text-slate-700 mb-2">
+                              <p className="text-sm font-medium text-foreground mb-2">
                                 Promptmall – {tmpl.title}:
                               </p>
-                              <pre className="bg-slate-900 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto whitespace-pre-wrap">
+                              <pre className="bg-gray-900 text-gray-100 rounded-lg p-4 text-sm overflow-x-auto whitespace-pre-wrap">
                                 {tmpl.content}
                               </pre>
                             </div>
                           ))}
 
                           {sub.tables.length === 0 && sub.promptTemplates.length === 0 && (
-                            <div className="text-sm text-slate-600 space-y-2">
+                            <div className="text-sm text-muted-foreground space-y-2">
                               {sub.body.split('\n').map((line, lIdx) => {
                                 const trimmed = line.trim()
                                 if (!trimmed) return null
@@ -401,7 +402,7 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                                 if (trimmed.startsWith('```')) return null
                                 if (trimmed.startsWith('> ')) {
                                   return (
-                                    <blockquote key={lIdx} className="border-l-4 border-curago-500 pl-4 italic text-slate-600 my-3">
+                                    <blockquote key={lIdx} className="border-l-4 border-primary pl-4 italic text-muted-foreground my-3">
                                       {trimmed.slice(2).replace(/\*\*/g, '')}
                                     </blockquote>
                                   )
@@ -442,10 +443,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Practical Examples */}
       {module.practicalExamples.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-curago-600" />
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <Lightbulb className="w-5 h-5 text-primary" />
               Praktiska exempel
             </h2>
             <SectionReadToggle
@@ -457,9 +458,9 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
           <div className="space-y-4">
             {module.practicalExamples.map((example) => (
-              <div key={example.id} className="bg-slate-50 rounded-lg p-5">
-                <h4 className="font-medium text-slate-900 mb-2">{example.title}</h4>
-                <div className="text-sm text-slate-600 space-y-2">
+              <div key={example.id} className="bg-secondary rounded-lg p-5">
+                <h4 className="font-medium text-foreground mb-2">{example.title}</h4>
+                <div className="text-sm text-muted-foreground space-y-2">
                   {example.body.split('\n\n').map((paragraph, i) => (
                     <div key={i}>
                       {paragraph.split('\n').map((line, j) => {
@@ -470,7 +471,7 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
                           const rest = trimmed.replace(/\*\*.+?\*\*\s*/, '')
                           return (
                             <p key={j}>
-                              <span className="font-semibold text-slate-800">{label}</span> {rest}
+                              <span className="font-semibold text-foreground">{label}</span> {rest}
                             </p>
                           )
                         }
@@ -491,13 +492,13 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Exercises */}
       {module.exercises.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              <Target className="w-5 h-5 text-curago-600" />
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <Target className="w-5 h-5 text-primary" />
               Praktiska övningar
             </h2>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-muted-foreground">
               {summary.exercisesCompleted}/{summary.exercisesTotal} gjorda
             </span>
           </div>
@@ -517,10 +518,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Reflection Questions */}
       {module.reflectionQuestions.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-curago-600" />
+            <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-primary" />
               Reflektionsfrågor
             </h2>
             <SectionReadToggle
@@ -533,10 +534,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
           <ol className="space-y-3">
             {module.reflectionQuestions.map((q, idx) => (
               <li key={q.id} className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-curago-100 text-curago-600 flex items-center justify-center flex-shrink-0 text-xs font-bold">
+                <span className="w-6 h-6 rounded-full bg-secondary text-primary flex items-center justify-center flex-shrink-0 text-xs font-bold">
                   {idx + 1}
                 </span>
-                <p className="text-sm text-slate-600 pt-0.5">{q.text}</p>
+                <p className="text-sm text-muted-foreground pt-0.5">{q.text}</p>
               </li>
             ))}
           </ol>
@@ -545,35 +546,35 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* External Resources */}
       {module.externalResources.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4 flex items-center gap-2">
-            <ExternalLink className="w-5 h-5 text-curago-600" />
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
+          <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+            <ExternalLink className="w-5 h-5 text-primary" />
             Fördjupning & externa resurser
           </h2>
 
           <div className="space-y-6">
             {module.externalResources.map((group, gIdx) => (
               <div key={gIdx}>
-                <h3 className="text-sm font-medium text-slate-700 mb-3">{group.category}</h3>
+                <h3 className="text-sm font-medium text-foreground mb-3">{group.category}</h3>
                 <div className="space-y-2">
                   {group.resources.map((resource, rIdx) => (
                     <div
                       key={rIdx}
-                      className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200"
+                      className="flex items-start gap-3 p-3 bg-secondary rounded-lg border border-border"
                     >
-                      <FileText className="w-4 h-4 text-slate-400 mt-0.5 flex-shrink-0" />
+                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm text-slate-900">{resource.title}</span>
+                          <span className="font-medium text-sm text-foreground">{resource.title}</span>
                           {resource.source && (
-                            <span className="text-xs text-slate-400">{resource.source}</span>
+                            <span className="text-xs text-muted-foreground">{resource.source}</span>
                           )}
                           {resource.duration && (
-                            <span className="text-xs text-slate-400">• {resource.duration}</span>
+                            <span className="text-xs text-muted-foreground">&bull; {resource.duration}</span>
                           )}
                         </div>
                         {resource.description && (
-                          <p className="text-xs text-slate-500 mt-0.5">{resource.description}</p>
+                          <p className="text-xs text-muted-foreground mt-0.5">{resource.description}</p>
                         )}
                       </div>
                     </div>
@@ -589,15 +590,15 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       {module.quiz.length > 0 && (
         <div className={`rounded-2xl border p-6 mb-8 ${
           summary.quizCompleted
-            ? 'bg-green-50 border-green-200'
-            : 'bg-curago-50 border-curago-200'
+            ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+            : 'bg-secondary border-primary/20'
         }`}>
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-1">
+              <h3 className="text-lg font-semibold text-foreground mb-1">
                 {summary.quizCompleted ? 'Quiz avklarat' : 'Testa din kunskap'}
               </h3>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-muted-foreground">
                 {summary.quizCompleted
                   ? `Resultat: ${summary.quizScore}% — ${module.quiz.length} frågor`
                   : `Frivilligt quiz med ${module.quiz.length} frågor`}
@@ -605,7 +606,7 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
             </div>
             <Link
               href={`/utbildning/${moduleId}/quiz`}
-              className="bg-curago-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-curago-700 transition-colors flex items-center gap-2"
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
             >
               {summary.quizCompleted ? 'Gör om' : 'Starta quiz'}
               <ArrowRight className="w-4 h-4" />
@@ -616,12 +617,12 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Summary */}
       {module.summary.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
-          <h2 className="text-xl font-semibold text-slate-900 mb-4">Sammanfattning</h2>
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8">
+          <h2 className="text-xl font-semibold text-foreground mb-4">Sammanfattning</h2>
           <ul className="space-y-2">
             {module.summary.map((point, idx) => (
-              <li key={idx} className="text-sm text-slate-600 flex items-start gap-2">
-                <Check className="w-4 h-4 text-curago-600 mt-0.5 flex-shrink-0" />
+              <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
+                <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
                 {point.text}
               </li>
             ))}
@@ -631,8 +632,8 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
 
       {/* Mark as Completed */}
       {!summary.moduleCompleted && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8 text-center">
-          <p className="text-slate-600 mb-4">Har du gått igenom modulen?</p>
+        <div className="bg-card rounded-2xl border border-border p-6 mb-8 text-center">
+          <p className="text-muted-foreground mb-4">Har du gått igenom modulen?</p>
           <button
             onClick={markModuleCompleted}
             disabled={saving}
@@ -649,11 +650,11 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         {prevModule ? (
           <Link
             href={`/utbildning/modul-${prevModule.moduleNumber}`}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <div>
-              <p className="text-xs text-slate-400">Föregående</p>
+              <p className="text-xs text-muted-foreground">Föregående</p>
               <p className="font-medium">{prevModule.metadata.title}</p>
             </div>
           </Link>
@@ -664,10 +665,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         {nextModule ? (
           <Link
             href={`/utbildning/modul-${nextModule.moduleNumber}`}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 text-right"
+            className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-right transition-colors"
           >
             <div>
-              <p className="text-xs text-slate-400">Nästa</p>
+              <p className="text-xs text-muted-foreground">Nästa</p>
               <p className="font-medium">{nextModule.metadata.title}</p>
             </div>
             <ArrowRight className="w-5 h-5" />
@@ -675,10 +676,10 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
         ) : (
           <Link
             href="/utbildning"
-            className="flex items-center gap-2 text-curago-600 hover:text-curago-700"
+            className="flex items-center gap-2 text-primary hover:underline"
           >
             <div className="text-right">
-              <p className="text-xs text-slate-400">Slutförd!</p>
+              <p className="text-xs text-muted-foreground">Slutförd!</p>
               <p className="font-medium">Tillbaka till översikten</p>
             </div>
             <ArrowRight className="w-5 h-5" />

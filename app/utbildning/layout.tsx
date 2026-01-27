@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { BookOpen, Home, LogOut, Menu, X, User, Loader2 } from 'lucide-react'
+import { Home, LogOut, Menu, X, User, Loader2 } from 'lucide-react'
 import { supabase, signOut } from '@/lib/supabase'
+import CuragoLogo from '@/components/CuragoLogo'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function UtbildningLayout({
   children,
@@ -32,7 +34,7 @@ export default function UtbildningLayout({
 
     checkAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
         router.push('/')
       }
@@ -49,21 +51,21 @@ export default function UtbildningLayout({
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-curago-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
+      <header className="bg-card border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/utbildning" className="flex items-center gap-2">
-              <BookOpen className="w-8 h-8 text-curago-600" />
-              <span className="text-xl font-semibold text-slate-900">Curago AI</span>
+              <CuragoLogo size="sm" />
+              <span className="text-sm font-medium text-muted-foreground">AI</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -72,8 +74,8 @@ export default function UtbildningLayout({
                 href="/utbildning"
                 className={`text-sm font-medium transition-colors ${
                   pathname === '/utbildning'
-                    ? 'text-curago-600'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 <span className="flex items-center gap-1">
@@ -85,13 +87,14 @@ export default function UtbildningLayout({
 
             {/* User Menu */}
             <div className="hidden md:flex items-center gap-4">
-              <span className="text-sm text-slate-500 flex items-center gap-2">
+              <ThemeToggle />
+              <span className="text-sm text-muted-foreground flex items-center gap-2">
                 <User className="w-4 h-4" />
                 {user?.email}
               </span>
               <button
                 onClick={handleSignOut}
-                className="text-sm text-slate-600 hover:text-slate-900 flex items-center gap-1"
+                className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 Logga ut
@@ -99,35 +102,38 @@ export default function UtbildningLayout({
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-slate-600" />
-              ) : (
-                <Menu className="w-6 h-6 text-slate-600" />
-              )}
-            </button>
+            <div className="flex md:hidden items-center gap-2">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-2 text-muted-foreground hover:text-foreground"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white">
+          <div className="md:hidden border-t border-border bg-card">
             <div className="container mx-auto px-4 py-4 space-y-4">
               <Link
                 href="/utbildning"
                 onClick={() => setMobileMenuOpen(false)}
-                className="block text-slate-600 hover:text-slate-900"
+                className="block text-muted-foreground hover:text-foreground transition-colors"
               >
                 Översikt
               </Link>
-              <div className="pt-4 border-t border-slate-200">
-                <p className="text-sm text-slate-500 mb-2">{user?.email}</p>
+              <div className="pt-4 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-2">{user?.email}</p>
                 <button
                   onClick={handleSignOut}
-                  className="text-sm text-slate-600 hover:text-slate-900 flex items-center gap-1"
+                  className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   Logga ut
@@ -142,9 +148,9 @@ export default function UtbildningLayout({
       <main>{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white mt-auto">
-        <div className="container mx-auto px-4 py-6 text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} Curago. Internutbildning för AI-kompetens.
+      <footer className="border-t border-border bg-card mt-auto">
+        <div className="container mx-auto px-4 py-6 text-center text-sm text-muted-foreground">
+          &copy; {new Date().getFullYear()} Curago. Internutbildning för AI-kompetens.
         </div>
       </footer>
     </div>
