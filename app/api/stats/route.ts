@@ -6,10 +6,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-  if (!supabaseUrl || !serviceRoleKey) {
-    console.warn('[/api/stats] Missing env: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json({
       total_users: 0,
       active_users_today: 0,
@@ -17,63 +18,25 @@ export async function GET() {
     })
   }
 
-  const supabase = createClient(supabaseUrl, serviceRoleKey, {
+  const supabase = createClient(supabaseUrl, supabaseKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-  // --- Total users & active today from auth.users ---
-  let totalUsers = 0
-  let activeToday = 0
+  // Call the database function — works with both anon key and service role key
+  const { data, error } = await supabase.rpc('get_landing_stats')
 
-  const { data: usersData, error: usersError } = await supabase.auth.admin.listUsers({
-    perPage: 1000,
-  })
-
-  if (usersError) {
-    console.error('[/api/stats] listUsers error:', usersError.message)
-  } else {
-    const users = usersData?.users ?? []
-    totalUsers = users.length
-
-    const todayStart = new Date()
-    todayStart.setHours(0, 0, 0, 0)
-
-    activeToday = users.filter((u) => {
-      if (!u.last_sign_in_at) return false
-      return new Date(u.last_sign_in_at) >= todayStart
-    }).length
-  }
-
-  // --- Average completion from user_progress ---
-  let avgCompletion = 0
-
-  const { data: progress, error: progressError } = await supabase
-    .from('user_progress')
-    .select('user_id, completed')
-
-  if (progressError) {
-    console.error('[/api/stats] user_progress error:', progressError.message)
-  } else if (progress && progress.length > 0) {
-    const TOTAL_MODULES = 6
-    const perUser: Record<string, number> = {}
-
-    for (const row of progress) {
-      if (!perUser[row.user_id]) perUser[row.user_id] = 0
-      if (row.completed) perUser[row.user_id]++
-    }
-
-    const completions = Object.values(perUser)
-    if (completions.length > 0) {
-      avgCompletion = Math.round(
-        completions.reduce((sum, c) => sum + (c / TOTAL_MODULES) * 100, 0) /
-          completions.length
-      )
-    }
+  if (error) {
+    console.error('[/api/stats] RPC error:', error.message)
+    return NextResponse.json({
+      total_users: 0,
+      active_users_today: 0,
+      avg_completion_percentage: 0,
+    })
   }
 
   return NextResponse.json({
-    total_users: totalUsers,
-    active_users_today: activeToday,
-    avg_completion_percentage: avgCompletion,
+    total_users: data?.total_users ?? 0,
+    active_users_today: data?.active_users_today ?? 0,
+    avg_completion_percentage: data?.avg_completion_percentage ?? 0,
   })
 }
