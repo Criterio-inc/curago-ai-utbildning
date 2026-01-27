@@ -9,6 +9,8 @@ import {
   CheckCircle,
   BookOpen,
   ExternalLink,
+  Video,
+  Globe,
   ChevronDown,
   ChevronUp,
   Target,
@@ -556,29 +558,62 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
             {module.externalResources.map((group, gIdx) => (
               <div key={gIdx}>
                 <h3 className="text-sm font-medium text-foreground mb-3">{group.category}</h3>
-                <div className="space-y-2">
-                  {group.resources.map((resource, rIdx) => (
-                    <div
-                      key={rIdx}
-                      className="flex items-start gap-3 p-3 bg-secondary rounded-lg border border-border"
-                    >
-                      <FileText className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-sm text-foreground">{resource.title}</span>
-                          {resource.source && (
-                            <span className="text-xs text-muted-foreground">{resource.source}</span>
-                          )}
-                          {resource.duration && (
-                            <span className="text-xs text-muted-foreground">&bull; {resource.duration}</span>
-                          )}
+                <div className="space-y-3">
+                  {group.resources.map((resource, rIdx) => {
+                    const youtubeMatch = resource.url?.match(
+                      /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/
+                    )
+                    const isExternal = !!resource.url
+                    const isYouTube = !!youtubeMatch
+
+                    const ResourceIcon = isYouTube ? Video : isExternal ? Globe : FileText
+
+                    return (
+                      <div key={rIdx}>
+                        <div className="flex items-start gap-3 p-3 bg-secondary rounded-lg border border-border">
+                          <ResourceIcon className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              {resource.url ? (
+                                <a
+                                  href={resource.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-medium text-sm text-primary hover:underline"
+                                >
+                                  {resource.title}
+                                  <ExternalLink className="w-3 h-3 inline ml-1 -mt-0.5" />
+                                </a>
+                              ) : (
+                                <span className="font-medium text-sm text-foreground">{resource.title}</span>
+                              )}
+                              {resource.source && (
+                                <span className="text-xs text-muted-foreground">{resource.source}</span>
+                              )}
+                              {resource.duration && (
+                                <span className="text-xs text-muted-foreground">&bull; {resource.duration}</span>
+                              )}
+                            </div>
+                            {resource.description && (
+                              <p className="text-xs text-muted-foreground mt-0.5">{resource.description}</p>
+                            )}
+                          </div>
                         </div>
-                        {resource.description && (
-                          <p className="text-xs text-muted-foreground mt-0.5">{resource.description}</p>
+                        {/* YouTube embed */}
+                        {isYouTube && youtubeMatch && (
+                          <div className="mt-2 rounded-lg overflow-hidden border border-border aspect-video">
+                            <iframe
+                              src={`https://www.youtube-nocookie.com/embed/${youtubeMatch[1]}`}
+                              title={resource.title}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                              className="w-full h-full"
+                            />
+                          </div>
                         )}
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             ))}

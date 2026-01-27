@@ -330,6 +330,16 @@ function parseReflectionQuestions(body: string): ReflectionQuestion[] {
 }
 
 /** Parsa externa resurser */
+/** Extrahera URL från markdown-länk: [text](url) → { text, url } */
+function extractMarkdownLink(text: string): { text: string; url?: string } {
+  const match = text.match(/^\[(.+?)\]\((.+?)\)$/)
+  if (match) return { text: match[1], url: match[2] }
+  // Stöd för inline-länk i längre text: "**[Title](url)** – description"
+  const inlineMatch = text.match(/\[(.+?)\]\((.+?)\)/)
+  if (inlineMatch) return { text: inlineMatch[1], url: inlineMatch[2] }
+  return { text }
+}
+
 function parseExternalResources(body: string): ExternalResourceGroup[] {
   const groups: ExternalResourceGroup[] = []
   const parts = body.split(/### /).filter(Boolean)
@@ -340,12 +350,19 @@ function parseExternalResources(body: string): ExternalResourceGroup[] {
     const tables = extractTables(lines.slice(1).join('\n'))
 
     if (tables.length > 0) {
-      const resources: ExternalResourceEntry[] = tables[0].rows.map((row) => ({
-        title: row['Resurs'] || row['Källa'] || Object.values(row)[0] || '',
-        source: row['Källa'] || row['URL'] || undefined,
-        duration: row['Tid'] || undefined,
-        description: row['Beskrivning'] || row['Fokus'] || '',
-      }))
+      const resources: ExternalResourceEntry[] = tables[0].rows.map((row) => {
+        const rawTitle = row['Resurs'] || row['Källa'] || Object.values(row)[0] || ''
+        const { text: title, url: titleUrl } = extractMarkdownLink(rawTitle)
+        const rawSource = row['Källa'] || row['URL'] || ''
+        const { text: source, url: sourceUrl } = extractMarkdownLink(rawSource)
+        return {
+          title,
+          source: source || undefined,
+          duration: row['Tid'] || undefined,
+          description: row['Beskrivning'] || row['Fokus'] || '',
+          url: titleUrl || sourceUrl || undefined,
+        }
+      })
 
       groups.push({ category, resources })
     } else {
@@ -357,9 +374,11 @@ function parseExternalResources(body: string): ExternalResourceGroup[] {
           /^-\s+\*\*(.+?)\*\*\s*[–-]?\s*(.*)/
         )
         if (bulletMatch) {
+          const { text: title, url } = extractMarkdownLink(bulletMatch[1])
           bulletResources.push({
-            title: bulletMatch[1],
+            title,
             description: bulletMatch[2] || '',
+            url,
           })
         }
       }
