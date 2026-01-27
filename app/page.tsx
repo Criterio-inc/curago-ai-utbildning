@@ -2,12 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { BookOpen, Users, TrendingUp, CheckCircle, Mail, ArrowRight, Loader2 } from 'lucide-react'
-import { supabase, sendMagicLink } from '@/lib/supabase'
+import { BookOpen, Users, TrendingUp, CheckCircle, Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react'
+import { supabase, signIn, signUp, isEmailAllowed } from '@/lib/supabase'
 
 export default function Home() {
   const router = useRouter()
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [isRegistering, setIsRegistering] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [checkingAuth, setCheckingAuth] = useState(true)
@@ -50,26 +53,58 @@ export default function Home() {
     fetchStats()
   }, [router])
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
 
-    const result = await sendMagicLink(
-      email,
-      `${window.location.origin}/auth/callback`
-    )
-
-    if (result.success) {
-      setMessage({
-        type: 'success',
-        text: 'Kolla din e-post! Vi har skickat en inloggningslänk.'
-      })
-    } else {
+    // Validate email domain first
+    if (!isEmailAllowed(email)) {
       setMessage({
         type: 'error',
-        text: result.error || 'Något gick fel. Försök igen.'
+        text: 'Endast e-postadresser med @curago.se kan använda denna tjänst.'
       })
+      setLoading(false)
+      return
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      setMessage({
+        type: 'error',
+        text: 'Lösenordet måste vara minst 6 tecken.'
+      })
+      setLoading(false)
+      return
+    }
+
+    if (isRegistering) {
+      // Sign up
+      const result = await signUp(email, password)
+      if (result.success) {
+        setMessage({
+          type: 'success',
+          text: 'Kontot har skapats! Du kan nu logga in.'
+        })
+        setIsRegistering(false)
+        setPassword('')
+      } else {
+        setMessage({
+          type: 'error',
+          text: result.error || 'Något gick fel vid registrering.'
+        })
+      }
+    } else {
+      // Sign in
+      const result = await signIn(email, password)
+      if (result.success) {
+        router.push('/utbildning')
+      } else {
+        setMessage({
+          type: 'error',
+          text: result.error || 'Något gick fel vid inloggning.'
+        })
+      }
     }
 
     setLoading(false)
@@ -104,12 +139,18 @@ export default function Home() {
           Utveckla din förmåga att använda AI som ett professionellt stöd i arbete och kunddialoger.
         </p>
 
-        {/* Login Form */}
+        {/* Login/Register Form */}
         <div className="max-w-md mx-auto bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
-          <h2 className="text-2xl font-semibold text-slate-900 mb-2">Logga in</h2>
-          <p className="text-slate-500 mb-6">Ange din Curago-e-post för att få en inloggningslänk</p>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
+            {isRegistering ? 'Skapa konto' : 'Logga in'}
+          </h2>
+          <p className="text-slate-500 mb-6">
+            {isRegistering
+              ? 'Registrera dig med din Curago-e-post'
+              : 'Ange din Curago-e-post och lösenord'}
+          </p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <input
@@ -122,6 +163,26 @@ export default function Home() {
               />
             </div>
 
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Lösenord"
+                className="w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-curago-500 focus:border-transparent"
+                required
+                minLength={6}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+
             <button
               type="submit"
               disabled={loading}
@@ -130,11 +191,11 @@ export default function Home() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Skickar...
+                  {isRegistering ? 'Skapar konto...' : 'Loggar in...'}
                 </>
               ) : (
                 <>
-                  Skicka inloggningslänk
+                  {isRegistering ? 'Skapa konto' : 'Logga in'}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -150,6 +211,22 @@ export default function Home() {
               {message.text}
             </div>
           )}
+
+          <div className="mt-6 pt-6 border-t border-slate-200">
+            <p className="text-sm text-slate-500">
+              {isRegistering ? 'Har du redan ett konto?' : 'Har du inget konto?'}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsRegistering(!isRegistering)
+                  setMessage(null)
+                }}
+                className="ml-1 text-curago-600 hover:text-curago-700 font-medium"
+              >
+                {isRegistering ? 'Logga in' : 'Skapa konto'}
+              </button>
+            </p>
+          </div>
         </div>
       </section>
 
