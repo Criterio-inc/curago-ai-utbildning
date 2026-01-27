@@ -5,43 +5,60 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Check if email is in whitelist
-export async function isEmailAllowed(email: string): Promise<boolean> {
-  const { data, error } = await supabase
-    .from('allowed_emails')
-    .select('email')
-    .eq('email', email.toLowerCase())
-    .eq('is_active', true)
-    .single()
+// Allowed email domain
+const ALLOWED_DOMAIN = 'curago.se'
 
-  return !error && !!data
+// Check if email is from allowed domain
+export function isEmailAllowed(email: string): boolean {
+  const domain = email.split('@')[1]?.toLowerCase()
+  return domain === ALLOWED_DOMAIN
 }
 
-// Send magic link
-export async function sendMagicLink(email: string, redirectTo: string): Promise<{ success: boolean; error?: string }> {
-  // First check whitelist
-  const allowed = await isEmailAllowed(email)
-
-  if (!allowed) {
+// Sign up with email and password
+export async function signUp(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+  // Check domain
+  if (!isEmailAllowed(email)) {
     return {
       success: false,
-      error: 'Denna e-postadress har inte behörighet. Kontakta din administratör.'
+      error: `Endast e-postadresser med @${ALLOWED_DOMAIN} kan registrera sig.`
     }
   }
 
-  // Send magic link
-  const { error } = await supabase.auth.signInWithOtp({
+  const { data, error } = await supabase.auth.signUp({
     email: email.toLowerCase(),
-    options: {
-      emailRedirectTo: redirectTo
-    }
+    password: password
   })
 
   if (error) {
+    if (error.message.includes('already registered')) {
+      return { success: false, error: 'Denna e-postadress är redan registrerad. Försök logga in istället.' }
+    }
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}
+
+// Sign in with email and password
+export async function signIn(email: string, password: string): Promise<{ success: boolean; error?: string }> {
+  // Check domain
+  if (!isEmailAllowed(email)) {
     return {
       success: false,
-      error: 'Kunde inte skicka inloggningslänk. Försök igen.'
+      error: `Endast e-postadresser med @${ALLOWED_DOMAIN} kan logga in.`
     }
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.toLowerCase(),
+    password: password
+  })
+
+  if (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      return { success: false, error: 'Fel e-postadress eller lösenord.' }
+    }
+    return { success: false, error: error.message }
   }
 
   return { success: true }
