@@ -33,19 +33,18 @@ export default function Home() {
     }
 
     const fetchStats = async () => {
-      const { data } = await supabase
-        .from('aggregate_stats')
-        .select('*')
-        .order('stat_date', { ascending: false })
-        .limit(1)
-        .single()
-
-      if (data) {
-        setStats({
-          totalUsers: data.total_users || 0,
-          activeUsersToday: data.active_users_today || 0,
-          avgCompletionPercentage: Math.round(data.avg_completion_percentage || 0)
-        })
+      try {
+        const res = await fetch('/api/stats')
+        if (res.ok) {
+          const data = await res.json()
+          setStats({
+            totalUsers: data.total_users || 0,
+            activeUsersToday: data.active_users_today || 0,
+            avgCompletionPercentage: Math.round(data.avg_completion_percentage || 0)
+          })
+        }
+      } catch {
+        // Stats are non-critical — keep defaults (0)
       }
     }
 
