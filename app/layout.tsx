@@ -4,6 +4,13 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'AI-utbildning | Curago',
   description: 'Utveckla din förmåga att använda AI som ett professionellt stöd i arbete och kunddialoger.',
+  openGraph: {
+    title: 'AI-utbildning | Curago',
+    description: 'Utveckla din förmåga att använda AI som ett professionellt stöd i arbete och kunddialoger.',
+    siteName: 'Curago AI-utbildning',
+    locale: 'sv_SE',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
