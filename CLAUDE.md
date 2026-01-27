@@ -10,6 +10,87 @@
 - **Ikoner**: Lucide React
 - **Deploy**: Vercel (auto-deploy vid push till main)
 
+---
+
+## Snabbguide: Uppdatera innehåll (utan kodkunskap)
+
+Allt kursinnehåll ligger i vanliga textfiler (markdown) i projektmappen. Du redigerar dem med valfri textredigerare — inga programmeringsverktyg behövs.
+
+### Redigera befintligt modulinnehåll
+
+1. Öppna filen för modulen du vill ändra, t.ex. `01_AI_i_kontext.md`
+   - Filerna heter `01_…`, `02_…` upp till `06_…` och ligger i projektets rotmapp
+2. Gör dina ändringar i texten — formateringen är enkel:
+   - `# Rubrik` = stor rubrik
+   - `## Underrubrik` = mellanrubrik
+   - `**fetstil**` = fetstil
+   - `*kursiv*` = kursiv
+   - `- punkt` = punktlista
+3. Spara filen
+4. Ändringarna syns automatiskt nästa gång sidan laddas
+
+### Lägga till en webbsidelänk i resurser
+
+I sektionen `## Fördjupning & Externa resurser` i en modulfil, lägg till en rad i tabellen:
+
+```
+| [Namn på sidan](https://adressen.se) | Källa | Tid | Kort beskrivning |
+```
+
+**Exempel — lägga till AI Swedens webbsida:**
+```
+| [AI Sweden](https://ai.se) | AI Sweden | — | Nationellt AI-center |
+```
+
+Resultatet i appen: en klickbar blå länk som öppnas i ny flik.
+
+### Lägga till ett YouTube-klipp
+
+Samma tabell som ovan, men med en YouTube-adress:
+
+```
+| [Namn på videon](https://youtube.com/watch?v=VIDEO_ID) | Källa | Tid | Beskrivning |
+```
+
+**Exempel — lägga till en introduktionsvideo:**
+```
+| [What is AI?](https://youtube.com/watch?v=ad79nYk2keg) | Google | 10 min | Intro till AI |
+```
+
+Resultatet i appen: en klickbar länk **plus** en inbäddad YouTube-spelare direkt på sidan.
+
+> Tips: `VIDEO_ID` hittar du i YouTube-adressen efter `watch?v=`. T.ex. i `https://youtube.com/watch?v=ad79nYk2keg` är ID:t `ad79nYk2keg`.
+
+### Lägga till en helt ny modul
+
+1. Skapa en ny fil i projektmappen, t.ex. `07_Ny_modul.md`
+2. Kopiera strukturen från en befintlig modulfil (t.ex. `01_AI_i_kontext.md`) och byt ut innehållet
+3. Se till att filen börjar med:
+   ```
+   # Modul 7: Din titel här
+   ## Din undertitel
+
+   **Tid:** X minuter | **Typ:** Teori | **Status:** Aktiv
+   ```
+4. **OBS — detta steg kräver en utvecklare:** Filen behöver registreras i koden (`lib/markdown-parser.ts`). Be en utvecklare lägga till filnamnet i funktionen `parseAllModules()`.
+
+### Publicera ändringar (deploy)
+
+Appen uppdateras automatiskt när ändringar pushas till `main`-branchen i GitHub:
+
+1. Spara dina filändringar
+2. I terminalen (eller GitHub Desktop):
+   ```
+   git add .
+   git commit -m "Uppdaterat modulinnehåll"
+   git push
+   ```
+3. Vercel bygger och publicerar automatiskt — klart inom ca 1–2 minuter
+
+> Om du inte är van vid Git: be en kollega hjälpa dig första gången, eller redigera filerna direkt i GitHubs webbgränssnitt (klicka på filen → pennikonen → spara).
+
+---
+
 ## Kommandon
 
 ```bash
