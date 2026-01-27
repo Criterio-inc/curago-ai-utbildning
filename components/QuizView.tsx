@@ -102,29 +102,31 @@ export default function QuizView({
   if (showResult) {
     return (
       <div className="container mx-auto px-4 py-8 max-w-2xl">
-        <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+        <div className="bg-card rounded-2xl border border-border p-8 text-center">
           <div className={`w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center ${
-            passed ? 'bg-green-100' : 'bg-amber-100'
+            passed
+              ? 'bg-green-100 dark:bg-green-900'
+              : 'bg-amber-100 dark:bg-amber-900'
           }`}>
             {passed ? (
-              <Trophy className="w-10 h-10 text-green-600" />
+              <Trophy className="w-10 h-10 text-green-600 dark:text-green-400" />
             ) : (
-              <RotateCcw className="w-10 h-10 text-amber-600" />
+              <RotateCcw className="w-10 h-10 text-amber-600 dark:text-amber-400" />
             )}
           </div>
 
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          <h1 className="text-3xl font-bold text-foreground mb-2">
             {passed ? 'Bra jobbat!' : 'Nästan!'}
           </h1>
 
-          <p className="text-slate-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             {passed
               ? 'Du har klarat quizet för denna modul.'
               : 'Du kan försöka igen eller fortsätta till nästa modul.'}
           </p>
 
-          <div className="text-5xl font-bold text-slate-900 mb-2">{score}%</div>
-          <p className="text-slate-500 mb-4">
+          <div className="text-5xl font-bold text-foreground mb-2">{score}%</div>
+          <p className="text-muted-foreground mb-4">
             {correctCount} av {questions.length} rätt
           </p>
 
@@ -139,20 +141,20 @@ export default function QuizView({
                   key={q.id}
                   className={`p-3 rounded-lg border text-sm ${
                     isCorrect
-                      ? 'bg-green-50 border-green-200'
-                      : 'bg-red-50 border-red-200'
+                      ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+                      : 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800'
                   }`}
                 >
                   <div className="flex items-start gap-2">
                     {isCorrect ? (
-                      <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
                     ) : (
-                      <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                      <XCircle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                     )}
                     <div>
-                      <p className="font-medium text-slate-900">{q.text}</p>
+                      <p className="font-medium text-foreground">{q.text}</p>
                       {!isCorrect && (
-                        <p className="text-slate-600 mt-1">
+                        <p className="text-muted-foreground mt-1">
                           Ditt svar: {userAnswer}) {q.options.find(o => o.letter === userAnswer)?.text}
                           <br />
                           Rätt svar: {q.correctAnswer}) {q.options.find(o => o.letter === q.correctAnswer)?.text}
@@ -168,14 +170,14 @@ export default function QuizView({
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={restartQuiz}
-              className="px-6 py-3 border border-slate-300 rounded-lg font-medium text-slate-700 hover:bg-slate-50 transition-colors inline-flex items-center justify-center gap-2"
+              className="px-6 py-3 border border-border rounded-lg font-medium text-foreground hover:bg-muted transition-colors inline-flex items-center justify-center gap-2"
             >
               <RotateCcw className="w-5 h-5" />
               Försök igen
             </button>
             <Link
               href={`/utbildning/${moduleId}`}
-              className="px-6 py-3 bg-curago-600 text-white rounded-lg font-medium hover:bg-curago-700 transition-colors inline-flex items-center justify-center gap-2"
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2"
             >
               Tillbaka till modulen
               <ArrowRight className="w-5 h-5" />
@@ -195,33 +197,33 @@ export default function QuizView({
       {/* Header */}
       <Link
         href={`/utbildning/${moduleId}`}
-        className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Tillbaka till modulen
       </Link>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-8">
+      <div className="bg-card rounded-2xl border border-border p-8">
         {/* Progress */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-slate-500">
+            <span className="text-sm text-muted-foreground">
               Fråga {currentQuestion + 1} av {questions.length}
             </span>
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-sm font-medium text-foreground">
               {moduleTitle}
             </span>
           </div>
-          <div className="w-full bg-slate-100 rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-2">
             <div
-              className="bg-curago-600 h-2 rounded-full transition-all"
+              className="bg-primary h-2 rounded-full transition-all"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             />
           </div>
         </div>
 
         {/* Question */}
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">
+        <h2 className="text-xl font-semibold text-foreground mb-6">
           {question.text}
         </h2>
 
@@ -232,18 +234,18 @@ export default function QuizView({
             const isCorrect = option.letter === question.correctAnswer
             const showCorrectness = showExplanation
 
-            let buttonStyle = 'border-slate-200 hover:border-curago-300 hover:bg-curago-50'
+            let buttonStyle = 'border-border hover:border-primary/50 hover:bg-secondary'
 
             if (showCorrectness) {
               if (isCorrect) {
-                buttonStyle = 'border-green-500 bg-green-50'
+                buttonStyle = 'border-green-500 bg-green-50 dark:bg-green-950'
               } else if (isSelected && !isCorrect) {
-                buttonStyle = 'border-red-500 bg-red-50'
+                buttonStyle = 'border-red-500 bg-red-50 dark:bg-red-950'
               } else {
-                buttonStyle = 'border-slate-200 opacity-50'
+                buttonStyle = 'border-border opacity-50'
               }
             } else if (isSelected) {
-              buttonStyle = 'border-curago-500 bg-curago-50'
+              buttonStyle = 'border-primary bg-secondary'
             }
 
             return (
@@ -260,8 +262,8 @@ export default function QuizView({
                       : showCorrectness && isSelected && !isCorrect
                         ? 'border-red-500 bg-red-500 text-white'
                         : isSelected
-                          ? 'border-curago-500 bg-curago-500 text-white'
-                          : 'border-slate-300 text-slate-400'
+                          ? 'border-primary bg-primary text-primary-foreground'
+                          : 'border-border text-muted-foreground'
                   }`}>
                     {showCorrectness && isCorrect ? (
                       <CheckCircle className="w-4 h-4" />
@@ -271,7 +273,7 @@ export default function QuizView({
                       option.letter
                     )}
                   </div>
-                  <span className="text-slate-700">{option.text}</span>
+                  <span className="text-foreground">{option.text}</span>
                 </div>
               </button>
             )
@@ -282,13 +284,13 @@ export default function QuizView({
         {showExplanation && (
           <div className={`p-4 rounded-lg mb-6 ${
             isCorrectAnswer
-              ? 'bg-green-50 border border-green-200'
-              : 'bg-amber-50 border border-amber-200'
+              ? 'bg-green-50 border border-green-200 dark:bg-green-950 dark:border-green-800'
+              : 'bg-amber-50 border border-amber-200 dark:bg-amber-950 dark:border-amber-800'
           }`}>
-            <p className="font-medium text-slate-900 mb-1">
+            <p className="font-medium text-foreground mb-1">
               {isCorrectAnswer ? 'Rätt!' : 'Inte riktigt'}
             </p>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               Rätt svar är {question.correctAnswer}) {question.options.find(o => o.letter === question.correctAnswer)?.text}
             </p>
           </div>
@@ -299,7 +301,7 @@ export default function QuizView({
           <button
             onClick={nextQuestion}
             disabled={saving}
-            className="w-full bg-curago-600 text-white py-3 rounded-lg font-medium hover:bg-curago-700 transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
           >
             {saving ? (
               'Sparar...'
