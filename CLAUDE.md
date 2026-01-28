@@ -12,7 +12,7 @@
 
 ---
 
-## Snabbguide: Uppdatera innehåll (utan kodkunskap)
+## Snabbguide: Uppdatera innehåll
 
 Allt kursinnehåll ligger i vanliga textfiler (markdown) i projektmappen. Du redigerar dem med valfri textredigerare — inga programmeringsverktyg behövs.
 
