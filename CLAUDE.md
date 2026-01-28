@@ -192,6 +192,8 @@ Kör innan commit:
 1. `npx tsc --noEmit` — inga typfel
 2. `npm run lint` — inga lintfel
 3. Manuell kontroll i webbläsaren om UI ändrats
+4. `npm audit` — inga kända sårbarheter (high/critical)
+
 
 ## Filgränser
 
