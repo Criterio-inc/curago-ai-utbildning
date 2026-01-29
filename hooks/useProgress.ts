@@ -83,11 +83,18 @@ export function useModuleProgress(moduleNumber: number, module: ParsedModule) {
     setSectionProgress({ ...updated })
   }, [moduleId])
 
-  const markModuleCompleted = useCallback(async () => {
+  const markModuleCompleted = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     setSaving(true)
-    const { data: { user } } = await supabase.auth.getUser()
 
-    if (user) {
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+      if (authError || !user) {
+        console.error('Auth error:', authError)
+        setSaving(false)
+        return { success: false, error: 'Du måste vara inloggad för att spara progress.' }
+      }
+
       // First, check if a row already exists
       const { data: existing } = await supabase
         .from('user_progress')
@@ -111,12 +118,18 @@ export function useModuleProgress(moduleNumber: number, module: ParsedModule) {
 
       if (error) {
         console.error('Failed to mark module as completed:', error)
-      } else {
-        setBackend((prev) => ({ ...prev, completed: true, completedAt: new Date().toISOString() }))
+        setSaving(false)
+        return { success: false, error: `Kunde inte spara: ${error.message}` }
       }
-    }
 
-    setSaving(false)
+      setBackend((prev) => ({ ...prev, completed: true, completedAt: new Date().toISOString() }))
+      setSaving(false)
+      return { success: true }
+    } catch (err) {
+      console.error('Unexpected error:', err)
+      setSaving(false)
+      return { success: false, error: 'Ett oväntat fel uppstod.' }
+    }
   }, [moduleId])
 
   const summary = calculateModuleProgress(moduleNumber, trackable, sectionProgress, backend)

@@ -19,6 +19,7 @@ import {
   FileText,
   Check,
   Circle,
+  AlertCircle,
 } from 'lucide-react'
 import { useModuleProgress } from '@/hooks/useProgress'
 import type { ParsedModule, Exercise } from '@/types/module-content'
@@ -176,6 +177,7 @@ function ModuleProgressBar({ percentage }: { percentage: number }) {
 
 export default function ModuleView({ module, allModules }: ModuleViewProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
+  const [completionMessage, setCompletionMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
 
   const {
     summary,
@@ -186,6 +188,16 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
     isSectionRead,
     isExerciseCompleted,
   } = useModuleProgress(module.moduleNumber, module)
+
+  const handleMarkCompleted = async () => {
+    setCompletionMessage(null)
+    const result = await markModuleCompleted()
+    if (result.success) {
+      setCompletionMessage({ type: 'success', text: 'Modulen är nu markerad som avklarad!' })
+    } else {
+      setCompletionMessage({ type: 'error', text: result.error || 'Något gick fel.' })
+    }
+  }
 
   const currentIndex = allModules.findIndex(m => m.moduleNumber === module.moduleNumber)
   const prevModule = currentIndex > 0 ? allModules[currentIndex - 1] : null
@@ -666,17 +678,36 @@ export default function ModuleView({ module, allModules }: ModuleViewProps) {
       )}
 
       {/* Mark as Completed */}
-      {!summary.moduleCompleted && (
+      {!summary.moduleCompleted ? (
         <div className="bg-card rounded-2xl border border-border p-6 mb-8 text-center">
           <p className="text-muted-foreground mb-4">Har du gått igenom modulen?</p>
           <button
-            onClick={markModuleCompleted}
+            onClick={handleMarkCompleted}
             disabled={saving}
             className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
           >
             <CheckCircle className="w-5 h-5" />
             {saving ? 'Sparar...' : 'Markera som avklarad'}
           </button>
+          {completionMessage && (
+            <div className={`mt-4 p-3 rounded-lg inline-flex items-center gap-2 ${
+              completionMessage.type === 'success'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+            }`}>
+              {completionMessage.type === 'success' ? (
+                <CheckCircle className="w-4 h-4" />
+              ) : (
+                <AlertCircle className="w-4 h-4" />
+              )}
+              {completionMessage.text}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-green-50 dark:bg-green-950 rounded-2xl border border-green-200 dark:border-green-800 p-6 mb-8 text-center">
+          <CheckCircle className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-2" />
+          <p className="text-green-800 dark:text-green-200 font-medium">Modulen är avklarad!</p>
         </div>
       )}
 
