@@ -197,12 +197,18 @@ export function calculateModuleProgress(
 
   // Weighted progress:
   // 50% sections read, 20% exercises, 20% quiz, 10% module marked complete
-  const sectionWeight = sectionsTotal > 0 ? (sectionsRead / sectionsTotal) * 50 : 50
-  const exerciseWeight = exercisesTotal > 0 ? (exercisesCompleted / exercisesTotal) * 20 : 20
-  const quizWeight = quizCompleted ? 20 : 0
-  const completedWeight = moduleCompleted ? 10 : 0
+  // Exception: if module is marked as completed, show 100%
+  let percentage: number
 
-  const percentage = Math.round(sectionWeight + exerciseWeight + quizWeight + completedWeight)
+  if (moduleCompleted) {
+    percentage = 100
+  } else {
+    const sectionWeight = sectionsTotal > 0 ? (sectionsRead / sectionsTotal) * 50 : 50
+    const exerciseWeight = exercisesTotal > 0 ? (exercisesCompleted / exercisesTotal) * 20 : 20
+    const quizWeight = quizCompleted ? 20 : 0
+
+    percentage = Math.round(sectionWeight + exerciseWeight + quizWeight)
+  }
 
   return {
     moduleNumber,
