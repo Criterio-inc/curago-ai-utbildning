@@ -69,14 +69,30 @@ export default function QuizView({
     const { data: { user } } = await supabase.auth.getUser()
 
     if (user) {
-      await supabase.from('user_progress').upsert({
+      // First, check if a row already exists
+      const { data: existing } = await supabase
+        .from('user_progress')
+        .select('completed, completed_at')
+        .eq('user_id', user.id)
+        .eq('module_id', moduleId)
+        .single()
+
+      // Upsert with all existing data preserved
+      const { error } = await supabase.from('user_progress').upsert({
         user_id: user.id,
         module_id: moduleId,
         quiz_score: score,
         quiz_completed_at: new Date().toISOString(),
+        // Preserve existing completion data if it exists
+        ...(existing?.completed !== undefined && { completed: existing.completed }),
+        ...(existing?.completed_at && { completed_at: existing.completed_at }),
       }, {
         onConflict: 'user_id,module_id',
       })
+
+      if (error) {
+        console.error('Failed to save quiz score:', error)
+      }
     }
 
     setSaving(false)
