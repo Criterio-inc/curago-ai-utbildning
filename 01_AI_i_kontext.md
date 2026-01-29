@@ -210,23 +210,23 @@ Reflektera kring:
 ### Svenska resurser
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| [AI för alla](https://www.ai.se/en/node/81535/ai-alla) | AI Sweden | Introduktion till AI på svenska |
-| [DIGG:s AI-vägledning](https://www.digg.se/kunskap-och-stod/ai-verktyg-och-tjanster) | DIGG | Stöd för AI i offentlig förvaltning |
-| [SKR:s AI-arbete](https://skr.se/skr/naringslivarbaborattrabyggaai.html) | SKR | Kommunsektorns AI-initiativ |
+| [Elements of AI](https://www.elementsofai.com/) | University of Helsinki | Gratis introduktion till AI (finns på svenska) |
+| [DIGG:s AI-vägledning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Stöd för AI i offentlig förvaltning |
+| [SKR:s AI-arbete](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | Kommunsektorns AI-initiativ |
 
 ### Internationella kurser (valfritt)
 | Resurs | Källa | Tid | Beskrivning |
 |--------|-------|-----|-------------|
 | [AI for Everyone](https://www.coursera.org/learn/ai-for-everyone) | Coursera / Andrew Ng | 4 timmar | Grundläggande introduktion till AI för icke-tekniker |
-| [What is Generative AI?](https://www.youtube.com/watch?v=G2fqAlgmoPo) | Google | 10 min | Kort förklaring av generativ AI |
+| [Generative AI for Everyone](https://www.coursera.org/learn/generative-ai-for-everyone) | Coursera / Andrew Ng | 5 timmar | Kurs om generativ AI för icke-tekniker |
 
 ### Läsning (valfritt)
-- **[AI Sweden: AI i Sverige](https://www.ai.se/en)** – Översikt av AI-landskapet i Norden
+- **[AI Sweden](https://www.ai.se/sv)** – Sveriges nationella AI-center
 - **["Attention Is All You Need"](https://arxiv.org/abs/1706.03762)** (2017) – Forskningsartikel som introducerade transformer-arkitekturen
 
 ### Verktyg att utforska
 - **[Claude.ai](https://claude.ai)** – Anthropics AI-assistent
-- **[ChatGPT](https://chat.openai.com)** – OpenAI:s AI-assistent
+- **[ChatGPT](https://chatgpt.com)** – OpenAI:s AI-assistent
 - **[Microsoft Copilot](https://copilot.microsoft.com)** – Integrerat i Microsoft 365
 
 ---
