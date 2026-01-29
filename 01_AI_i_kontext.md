@@ -210,24 +210,24 @@ Reflektera kring:
 ### Svenska resurser
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| AI för alla | AI Sweden | Introduktion till AI på svenska |
-| DIGG:s AI-vägledning | DIGG | Stöd för AI i offentlig förvaltning |
-| SKR:s AI-arbete | SKR | Kommunsektorns AI-initiativ |
+| [AI för alla](https://www.ai.se/en/node/81535/ai-alla) | AI Sweden | Introduktion till AI på svenska |
+| [DIGG:s AI-vägledning](https://www.digg.se/kunskap-och-stod/ai-verktyg-och-tjanster) | DIGG | Stöd för AI i offentlig förvaltning |
+| [SKR:s AI-arbete](https://skr.se/skr/naringslivarbaborattrabyggaai.html) | SKR | Kommunsektorns AI-initiativ |
 
 ### Internationella kurser (valfritt)
 | Resurs | Källa | Tid | Beskrivning |
 |--------|-------|-----|-------------|
-| AI for Everyone | Coursera / Andrew Ng | 4 timmar | Grundläggande introduktion till AI för icke-tekniker |
-| What is Generative AI? | Google | 10 min | Kort förklaring av generativ AI |
+| [AI for Everyone](https://www.coursera.org/learn/ai-for-everyone) | Coursera / Andrew Ng | 4 timmar | Grundläggande introduktion till AI för icke-tekniker |
+| [What is Generative AI?](https://www.youtube.com/watch?v=G2fqAlgmoPo) | Google | 10 min | Kort förklaring av generativ AI |
 
 ### Läsning (valfritt)
-- **AI Sweden: AI i Sverige** – Översikt av AI-landskapet i Norden
-- **"Attention Is All You Need"** (2017) – Forskningsartikel som introducerade transformer-arkitekturen
+- **[AI Sweden: AI i Sverige](https://www.ai.se/en)** – Översikt av AI-landskapet i Norden
+- **["Attention Is All You Need"](https://arxiv.org/abs/1706.03762)** (2017) – Forskningsartikel som introducerade transformer-arkitekturen
 
 ### Verktyg att utforska
-- **Claude.ai** – Anthropics AI-assistent
-- **ChatGPT** – OpenAI:s AI-assistent
-- **Microsoft Copilot** – Integrerat i Microsoft 365
+- **[Claude.ai](https://claude.ai)** – Anthropics AI-assistent
+- **[ChatGPT](https://chat.openai.com)** – OpenAI:s AI-assistent
+- **[Microsoft Copilot](https://copilot.microsoft.com)** – Integrerat i Microsoft 365
 
 ---
 
