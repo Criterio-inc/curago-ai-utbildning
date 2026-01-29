@@ -88,16 +88,32 @@ export function useModuleProgress(moduleNumber: number, module: ParsedModule) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (user) {
-      await supabase.from('user_progress').upsert({
+      // First, check if a row already exists
+      const { data: existing } = await supabase
+        .from('user_progress')
+        .select('quiz_score, quiz_completed_at')
+        .eq('user_id', user.id)
+        .eq('module_id', moduleId)
+        .single()
+
+      // Upsert with all existing data preserved
+      const { error } = await supabase.from('user_progress').upsert({
         user_id: user.id,
         module_id: moduleId,
         completed: true,
         completed_at: new Date().toISOString(),
+        // Preserve existing quiz data if it exists
+        ...(existing?.quiz_score !== undefined && { quiz_score: existing.quiz_score }),
+        ...(existing?.quiz_completed_at && { quiz_completed_at: existing.quiz_completed_at }),
       }, {
         onConflict: 'user_id,module_id',
       })
 
-      setBackend((prev) => ({ ...prev, completed: true, completedAt: new Date().toISOString() }))
+      if (error) {
+        console.error('Failed to mark module as completed:', error)
+      } else {
+        setBackend((prev) => ({ ...prev, completed: true, completedAt: new Date().toISOString() }))
+      }
     }
 
     setSaving(false)
