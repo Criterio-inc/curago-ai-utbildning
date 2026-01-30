@@ -273,10 +273,10 @@ Kund 3: "Kan ni lära våra medarbetare att använda AI?"
 | [AI Sweden](https://www.ai.se/sv) | AI Sweden | Nationellt centrum för tillämpad AI |
 
 ### Internationella rapporter
-| Resurs | Beskrivning |
-|--------|-------------|
-| [McKinsey: State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | Årlig rapport om AI-adoption i företag |
-| [Gartner Hype Cycle for AI](https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence) | Ramverk för att förstå teknikförväntningar |
+| Resurs | Källa | Beskrivning |
+|--------|-------|-------------|
+| [McKinsey: State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | McKinsey | Årlig rapport om AI-adoption i företag |
+| [Gartner Hype Cycle for AI](https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence) | Gartner | Ramverk för att förstå teknikförväntningar |
 
 ### Verktyg för kunddialog
 - **[Miro](https://miro.com)** / **[Mural](https://www.mural.co)** – Visuella workshops om AI med kund

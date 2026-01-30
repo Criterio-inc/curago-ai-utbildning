@@ -116,22 +116,22 @@ Ett par personer utses som "AI-ambassadörer" med uppdrag att:
 
 #### Svenska primärkällor (2025)
 
-| Källa | Typ | Fokus |
-|-------|-----|-------|
-| **[digg.se/ai](https://www.digg.se/ai-for-offentlig-forvaltning)** | Webbplats | DIGG/IMY:s riktlinjer, vägledning, webbinarier |
-| **[imy.se](https://www.imy.se/)** | Webbplats | GDPR och AI, dataskydd |
-| **[ai.se](https://www.ai.se/sv)** | Webbplats | AI Sweden – nätverk, resurser, utbildning |
-| **[skr.se](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html)** | Webbplats | AI i kommuner och regioner |
+| Resurs | Källa | Fokus |
+|--------|-------|-------|
+| [DIGG AI-vägledning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Riktlinjer, vägledning, webbinarier |
+| [IMY - AI och dataskydd](https://www.imy.se/) | IMY | GDPR och AI, dataskydd |
+| [AI Sweden](https://www.ai.se/sv) | AI Sweden | Nätverk, resurser, utbildning |
+| [SKR AI-arbete](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | AI i kommuner och regioner |
 
 #### Internationella källor
 
-| Källa | Typ | Fokus |
-|-------|-----|-------|
-| **[One Useful Thing](https://www.oneusefulthing.org/)** (Ethan Mollick) | Nyhetsbrev | Praktisk AI-användning |
-| **[The Algorithmic Bridge](https://www.thealgorithmicbridge.com/)** | Nyhetsbrev | AI-utveckling och samhälle |
-| **[AI Snake Oil](https://www.aisnakeoil.com/)** | Bok/blogg | Kritisk granskning av AI-hype |
-| **[Anthropic Blog](https://www.anthropic.com/news)** | Blogg | Claudes utveckling och säkerhet |
-| **[McKinsey AI Reports](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)** | Rapporter | AI i näringsliv |
+| Resurs | Källa | Fokus |
+|--------|-------|-------|
+| [One Useful Thing](https://www.oneusefulthing.org/) | Ethan Mollick | Praktisk AI-användning |
+| [The Algorithmic Bridge](https://www.thealgorithmicbridge.com/) | Alberto Romero | AI-utveckling och samhälle |
+| [AI Snake Oil](https://www.aisnakeoil.com/) | Arvind Narayanan | Kritisk granskning av AI-hype |
+| [Anthropic Blog](https://www.anthropic.com/news) | Anthropic | Claudes utveckling och säkerhet |
+| [McKinsey State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | McKinsey | AI i näringsliv |
 
 #### Varningssignaler att vara uppmärksam på
 
