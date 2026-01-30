@@ -268,18 +268,18 @@ Kund 3: "Kan ni lära våra medarbetare att använda AI?"
 ### Svenska resurser om AI-adoption
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| AI i offentlig sektor | DIGG | Vägledning och erfarenheter |
-| AI-mognadsindex för kommuner | SKR | Ramverk för att bedöma kunders AI-mognad |
-| Svenskt Näringsliv: AI-rapport | Svenskt Näringsliv | AI-användning i svenska företag |
+| [AI för offentlig förvaltning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Vägledning och erfarenheter |
+| [AI i kommuner och regioner](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | Case och lärdomar från kommunsektorn |
+| [AI Sweden](https://www.ai.se/sv) | AI Sweden | Nationellt centrum för tillämpad AI |
 
 ### Internationella rapporter
 | Resurs | Beskrivning |
 |--------|-------------|
-| McKinsey: State of AI | Årlig rapport om AI-adoption i företag |
-| Gartner Hype Cycle | Ramverk för att förstå teknikförväntningar |
+| [McKinsey: State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | Årlig rapport om AI-adoption i företag |
+| [Gartner Hype Cycle for AI](https://www.gartner.com/en/articles/hype-cycle-for-artificial-intelligence) | Ramverk för att förstå teknikförväntningar |
 
 ### Verktyg för kunddialog
-- **Miro/Mural** – Visuella workshops om AI med kund
+- **[Miro](https://miro.com)** / **[Mural](https://www.mural.co)** – Visuella workshops om AI med kund
 - **Maturity-modeller** – Ramverk för att bedöma kundens AI-mognad
 
 ### Curagos interna resurser
