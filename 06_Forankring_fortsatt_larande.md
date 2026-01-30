@@ -118,20 +118,20 @@ Ett par personer utses som "AI-ambassadörer" med uppdrag att:
 
 | Källa | Typ | Fokus |
 |-------|-----|-------|
-| **digg.se/ai** | Webbplats | DIGG/IMY:s riktlinjer, vägledning, webbinarier |
-| **imy.se** | Webbplats | GDPR och AI, dataskydd |
-| **ai.se** | Webbplats | AI Sweden – nätverk, resurser, utbildning |
-| **skr.se** | Webbplats | AI i kommuner och regioner |
+| **[digg.se/ai](https://www.digg.se/ai-for-offentlig-forvaltning)** | Webbplats | DIGG/IMY:s riktlinjer, vägledning, webbinarier |
+| **[imy.se](https://www.imy.se/)** | Webbplats | GDPR och AI, dataskydd |
+| **[ai.se](https://www.ai.se/sv)** | Webbplats | AI Sweden – nätverk, resurser, utbildning |
+| **[skr.se](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html)** | Webbplats | AI i kommuner och regioner |
 
 #### Internationella källor
 
 | Källa | Typ | Fokus |
 |-------|-----|-------|
-| **One Useful Thing** (Ethan Mollick) | Nyhetsbrev | Praktisk AI-användning |
-| **The Algorithmic Bridge** | Nyhetsbrev | AI-utveckling och samhälle |
-| **AI Snake Oil** | Bok/blogg | Kritisk granskning av AI-hype |
-| **Anthropic Blog** | Blogg | Claudes utveckling och säkerhet |
-| **McKinsey AI Reports** | Rapporter | AI i näringsliv |
+| **[One Useful Thing](https://www.oneusefulthing.org/)** (Ethan Mollick) | Nyhetsbrev | Praktisk AI-användning |
+| **[The Algorithmic Bridge](https://www.thealgorithmicbridge.com/)** | Nyhetsbrev | AI-utveckling och samhälle |
+| **[AI Snake Oil](https://www.aisnakeoil.com/)** | Bok/blogg | Kritisk granskning av AI-hype |
+| **[Anthropic Blog](https://www.anthropic.com/news)** | Blogg | Claudes utveckling och säkerhet |
+| **[McKinsey AI Reports](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)** | Rapporter | AI i näringsliv |
 
 #### Varningssignaler att vara uppmärksam på
 

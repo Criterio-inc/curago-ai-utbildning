@@ -320,24 +320,24 @@ Dokumentera erfarenheten för diskussion vid nästa tillfälle.
 ### Svenska resurser
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| AI-guiden för offentlig sektor | DIGG | Praktisk vägledning för AI i förvaltning |
-| Promptbibliotek på svenska | AI Sweden | Exempel på effektiva promptar |
-| AI i kommuner – erfarenheter | SKR | Case och lärdomar från kommunsektorn |
+| [AI för offentlig förvaltning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Praktisk vägledning för AI i förvaltning |
+| [AI Sweden resurser](https://www.ai.se/sv) | AI Sweden | Nationellt AI-center med resurser och nätverk |
+| [AI i kommuner och regioner](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | Case och lärdomar från kommunsektorn |
 
 ### Internationella resurser
 | Resurs | Källa | Tid | Beskrivning |
 |--------|-------|-----|-------------|
-| Prompt Engineering Guide | promptingguide.ai | 2-3 timmar | Omfattande guide till prompttekniker |
-| AI for Knowledge Workers | Coursera / UC Davis | 8 timmar | Praktisk kurs för kunskapsarbetare |
+| [Prompt Engineering Guide](https://www.promptingguide.ai/) | DAIR.AI | 2-3 timmar | Omfattande guide till prompttekniker |
+| [AI for Knowledge Workers](https://www.coursera.org/learn/ai-for-knowledge-workers) | Coursera / UC Davis | 8 timmar | Praktisk kurs för kunskapsarbetare |
 
 ### Promptbibliotek
-- **Anthropic Prompt Library** – Exempel på effektiva promptar för olika uppgifter
-- **OpenAI Cookbook** – Teknisk guide till prompting
+- **[Anthropic Prompt Library](https://docs.anthropic.com/en/resources/prompt-library/library)** – Exempel på effektiva promptar för olika uppgifter
+- **[OpenAI Cookbook](https://cookbook.openai.com/)** – Teknisk guide till prompting
 
 ### Verktyg att utforska
-- **Claude Projects** – Skapa projekt med egen kontext och instruktioner
-- **Custom GPTs** – Skräddarsy ChatGPT för specifika uppgifter
-- **Notion AI** – AI integrerat i dokumentverktyg
+- **[Claude](https://claude.ai)** – Anthropics AI-assistent med projektfunktion
+- **[ChatGPT](https://chat.openai.com)** – OpenAIs AI-assistent med Custom GPTs
+- **[Notion AI](https://www.notion.so/product/ai)** – AI integrerat i dokumentverktyg
 
 ---
 

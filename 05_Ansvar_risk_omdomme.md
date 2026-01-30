@@ -456,36 +456,36 @@ Tänk på ett uppdrag du nyligen arbetat med:
 ### Primära svenska resurser (2025)
 | Resurs | URL | Beskrivning |
 |--------|-----|-------------|
-| **DIGG: AI för offentlig förvaltning** | digg.se/ai | De 18 riktlinjerna + vägledning, webbinarier |
-| **IMY: AI och dataskydd** | imy.se | GDPR-vägledning specifikt för AI |
-| **AI-kommissionens färdplan** | regeringen.se | Nationell strategi och handlingsplan |
-| **AI Sweden** | ai.se | Nationellt centrum – resurser, nätverk, utbildning |
-| **SKR: AI i kommuner** | skr.se | Erfarenheter och stöd för kommunsektorn |
+| **[DIGG: AI för offentlig förvaltning](https://www.digg.se/ai-for-offentlig-forvaltning)** | digg.se/ai | De 18 riktlinjerna + vägledning, webbinarier |
+| **[IMY: AI och dataskydd](https://www.imy.se/)** | imy.se | GDPR-vägledning specifikt för AI |
+| **[AI-kommissionens färdplan](https://www.regeringen.se/rattsliga-dokument/statens-offentliga-utredningar/2024/11/sou-202489/)** | regeringen.se | Nationell strategi och handlingsplan |
+| **[AI Sweden](https://www.ai.se/sv)** | ai.se | Nationellt centrum – resurser, nätverk, utbildning |
+| **[SKR: AI i kommuner](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html)** | skr.se | Erfarenheter och stöd för kommunsektorn |
 
 ### Svenska myndigheter med AI-ansvar
 | Myndighet | Roll |
 |-----------|------|
-| **DIGG** | Samordning, vägledning, AI-verkstad |
-| **IMY** | Dataskyddstillsyn, regulatorisk sandlåda |
-| **Upphandlingsmyndigheten** | Vägledning om upphandling av AI |
-| **Finansinspektionen** | AI i finanssektorn |
-| **Socialstyrelsen** | AI i vård och omsorg |
-| **Skolverket** | AI i utbildning |
+| **[DIGG](https://www.digg.se)** | Samordning, vägledning, AI-verkstad |
+| **[IMY](https://www.imy.se)** | Dataskyddstillsyn, regulatorisk sandlåda |
+| **[Upphandlingsmyndigheten](https://www.upphandlingsmyndigheten.se)** | Vägledning om upphandling av AI |
+| **[Finansinspektionen](https://www.fi.se)** | AI i finanssektorn |
+| **[Socialstyrelsen](https://www.socialstyrelsen.se)** | AI i vård och omsorg |
+| **[Skolverket](https://www.skolverket.se)** | AI i utbildning |
 
 ### EU-resurser
 | Resurs | Beskrivning |
 |--------|-------------|
-| **artificialintelligenceact.eu** | Komplett guide till EU AI Act |
-| **EU AI Office** | Officiell EU-resurs för AI-reglering |
-| **EDPB (edpb.europa.eu)** | Europeiska dataskyddsstyrelsen – AI och GDPR |
+| **[AI Act Explorer](https://artificialintelligenceact.eu/)** | Komplett guide till EU AI Act |
+| **[EU AI Office](https://digital-strategy.ec.europa.eu/en/policies/ai-office)** | Officiell EU-resurs för AI-reglering |
+| **[EDPB](https://www.edpb.europa.eu/)** | Europeiska dataskyddsstyrelsen – AI och GDPR |
 
 ### Forskning och fördjupning
 | Resurs | Beskrivning |
 |--------|-------------|
-| **Lunds universitet – AI-forskning** | Svensk akademisk forskning om AI-etik |
-| **RISE** | Forskningsinstitut med AI-fokus |
-| **Gender Shades (Buolamwini)** | Banbrytande forskning om bias |
-| **Anthropic Safety** | Hur Claude är designad för säkerhet |
+| **[Lunds universitet – AI-forskning](https://www.ai.lu.se/)** | Svensk akademisk forskning om AI |
+| **[RISE](https://www.ri.se/sv/expertisomraden/ai)** | Forskningsinstitut med AI-fokus |
+| **[Gender Shades](http://gendershades.org/)** | Banbrytande forskning om bias (Buolamwini) |
+| **[Anthropic Research](https://www.anthropic.com/research)** | Hur Claude är designad för säkerhet |
 
 ---
 

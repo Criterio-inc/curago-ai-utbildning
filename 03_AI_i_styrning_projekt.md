@@ -339,29 +339,28 @@ Välj ett pågående eller nyligen avslutat projekt. Använd AI för att:
 ### Svenska resurser
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| Digital verksamhetsutveckling | SKR | Ramverk för digitalisering i kommuner |
-| Projektmodellen PPS | Tieto/Praktisk Projektstyrning | Svensk projektmetodik |
-| Förändringsledning i offentlig sektor | SKL Kommentus | Handbok anpassad för svenska förhållanden |
+| [Digitalisering i välfärden](https://skr.se/digitaliseringivalfarden.411.html) | SKR | Ramverk för digitalisering i kommuner |
+| [AI för offentlig förvaltning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Vägledning för AI i offentlig sektor |
 
 ### Nordisk kontext
 - **Samverkansmodellen** – Nordisk tradition av fackligt samarbete vid förändringar
-- **Tillitsbaserad styrning** – Svenskt förhållningssätt till ledning och styrning
+- **[Tillitsbaserad styrning](https://skr.se/skr/naringslivarbetedigitalisering/forsaborgerledningochstyrning/tillitsbaseradstyrningochledning.49382.html)** – Svenskt förhållningssätt till ledning och styrning
 
 ### Internationella artiklar
 | Resurs | Källa | Beskrivning |
 |--------|-------|-------------|
-| How AI Will Transform Project Management | Harvard Business Review | Framtidsperspektiv på AI i projektledning |
-| AI in Change Management: Early Findings | Prosci | Forskning om AI i förändringsledning |
+| [How AI Will Transform Project Management](https://hbr.org/2023/02/how-ai-will-transform-project-management) | Harvard Business Review | Framtidsperspektiv på AI i projektledning |
+| [AI in Change Management: Early Findings](https://www.prosci.com/blog/ai-in-change-management-early-findings) | Prosci | Forskning om AI i förändringsledning |
 
 ### Ramverk
-- **ADKAR-modellen** – Klassiskt ramverk för förändringsledning
+- **[ADKAR-modellen](https://www.prosci.com/methodology/adkar)** – Klassiskt ramverk för förändringsledning
 - **Riskmatris** – Sannolikhet x konsekvens för prioritering
 - **Stakeholder mapping** – Intressentanalys för förändringsprojekt
 
 ### Verktyg
-- **Notion AI** – AI-stöd i projektdokumentation
-- **Monday.com AI** – AI-funktioner i projektverktyg
-- **Microsoft Copilot** – AI-stöd i Microsoft Project och Planner
+- **[Notion AI](https://www.notion.so/product/ai)** – AI-stöd i projektdokumentation
+- **[Monday.com](https://monday.com)** – Projektverktyg med AI-funktioner
+- **[Microsoft Copilot](https://www.microsoft.com/sv-se/microsoft-365/copilot)** – AI-stöd i Microsoft 365
 
 ---
 
