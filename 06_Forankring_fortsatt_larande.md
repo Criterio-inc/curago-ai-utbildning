@@ -114,24 +114,7 @@ Ett par personer utses som "AI-ambassadörer" med uppdrag att:
 
 ### 3. Att hålla sig uppdaterad
 
-#### Svenska primärkällor (2025)
-
-| Resurs | Källa | Fokus |
-|--------|-------|-------|
-| [DIGG AI-vägledning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Riktlinjer, vägledning, webbinarier |
-| [IMY - AI och dataskydd](https://www.imy.se/) | IMY | GDPR och AI, dataskydd |
-| [AI Sweden](https://www.ai.se/sv) | AI Sweden | Nätverk, resurser, utbildning |
-| [SKR AI-arbete](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | AI i kommuner och regioner |
-
-#### Internationella källor
-
-| Resurs | Källa | Fokus |
-|--------|-------|-------|
-| [One Useful Thing](https://www.oneusefulthing.org/) | Ethan Mollick | Praktisk AI-användning |
-| [The Algorithmic Bridge](https://www.thealgorithmicbridge.com/) | Alberto Romero | AI-utveckling och samhälle |
-| [AI Snake Oil](https://www.aisnakeoil.com/) | Arvind Narayanan | Kritisk granskning av AI-hype |
-| [Anthropic Blog](https://www.anthropic.com/news) | Anthropic | Claudes utveckling och säkerhet |
-| [McKinsey State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | McKinsey | AI i näringsliv |
+> Se sektionen **Fördjupning & externa resurser** längre ner för rekommenderade källor.
 
 #### Varningssignaler att vara uppmärksam på
 
@@ -235,6 +218,27 @@ Diskutera i hela gruppen:
 4. Vad ser du som den största risken?
 
 5. Vad behöver Curago som organisation göra för att lyckas med AI?
+
+---
+
+## Fördjupning & externa resurser
+
+### Svenska primärkällor (2025)
+| Resurs | Källa | Fokus |
+|--------|-------|-------|
+| [DIGG AI-vägledning](https://www.digg.se/ai-for-offentlig-forvaltning) | DIGG | Riktlinjer, vägledning, webbinarier |
+| [IMY - AI och dataskydd](https://www.imy.se/) | IMY | GDPR och AI, dataskydd |
+| [AI Sweden](https://www.ai.se/sv) | AI Sweden | Nätverk, resurser, utbildning |
+| [SKR AI-arbete](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | AI i kommuner och regioner |
+
+### Internationella källor
+| Resurs | Källa | Fokus |
+|--------|-------|-------|
+| [One Useful Thing](https://www.oneusefulthing.org/) | Ethan Mollick | Praktisk AI-användning |
+| [The Algorithmic Bridge](https://www.thealgorithmicbridge.com/) | Alberto Romero | AI-utveckling och samhälle |
+| [AI Snake Oil](https://www.aisnakeoil.com/) | Arvind Narayanan | Kritisk granskning av AI-hype |
+| [Anthropic Blog](https://www.anthropic.com/news) | Anthropic | Claudes utveckling och säkerhet |
+| [McKinsey State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) | McKinsey | AI i näringsliv |
 
 ---
 

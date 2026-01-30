@@ -463,13 +463,13 @@ Tänk på ett uppdrag du nyligen arbetat med:
 | [SKR: AI i kommuner](https://skr.se/digitaliseringivalfarden/datadrivenutveckling/artificiellintelligensai.716.html) | SKR | Erfarenheter och stöd för kommunsektorn |
 
 ### Svenska myndigheter med AI-ansvar
-| Myndighet | Källa | Roll |
-|-----------|-------|------|
-| [DIGG](https://www.digg.se) | DIGG | Samordning, vägledning, AI-verkstad |
-| [IMY](https://www.imy.se) | IMY | Dataskyddstillsyn, regulatorisk sandlåda |
-| [Upphandlingsmyndigheten](https://www.upphandlingsmyndigheten.se) | UHM | Vägledning om upphandling av AI |
-| [Finansinspektionen](https://www.fi.se) | FI | AI i finanssektorn |
-| [Socialstyrelsen](https://www.socialstyrelsen.se) | SoS | AI i vård och omsorg |
+| Resurs | Källa | Roll |
+|--------|-------|------|
+| [DIGG](https://www.digg.se) | Myndigheten för digital förvaltning | Samordning, vägledning, AI-verkstad |
+| [IMY](https://www.imy.se) | Integritetsskyddsmyndigheten | Dataskyddstillsyn, regulatorisk sandlåda |
+| [Upphandlingsmyndigheten](https://www.upphandlingsmyndigheten.se) | Upphandlingsmyndigheten | Vägledning om upphandling av AI |
+| [Finansinspektionen](https://www.fi.se) | Finansinspektionen | AI i finanssektorn |
+| [Socialstyrelsen](https://www.socialstyrelsen.se) | Socialstyrelsen | AI i vård och omsorg |
 | [Skolverket](https://www.skolverket.se) | Skolverket | AI i utbildning |
 
 ### EU-resurser
