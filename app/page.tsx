@@ -50,6 +50,10 @@ export default function Home() {
 
     checkAuth()
     fetchStats()
+
+    // Uppdatera statistiken var 30:e sekund
+    const interval = setInterval(fetchStats, 30000)
+    return () => clearInterval(interval)
   }, [router])
 
   const handleSubmit = async (e: React.FormEvent) => {

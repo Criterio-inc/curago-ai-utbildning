@@ -189,6 +189,10 @@ export function useTrainingProgress(modules: ParsedModule[]) {
     }
 
     loadBackend()
+
+    // Uppdatera från Supabase var 30:e sekund för synk mellan enheter
+    const interval = setInterval(loadBackend, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   // Listen for localStorage changes (from other tabs or ModuleView updates)
