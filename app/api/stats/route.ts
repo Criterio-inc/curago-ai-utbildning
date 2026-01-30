@@ -24,20 +24,32 @@ export async function GET() {
   })
 
   try {
-    // Get total users
-    const { count: totalUsers } = await supabase
-      .from('user_progress')
-      .select('user_id', { count: 'exact', head: true })
+    // Use RPC function to get stats from auth.users (requires service role key)
+    const { data, error } = await supabase.rpc('get_landing_stats')
 
-    // For active users, we count distinct users in user_progress
-    // (since we can't query auth.users directly with anon key)
+    if (!error && data) {
+      return NextResponse.json({
+        total_users: data.total_users ?? 0,
+        active_users_today: data.active_users_today ?? 0,
+        avg_completion_percentage: data.avg_completion_percentage ?? 0,
+      })
+    }
+
+    // Fallback: calculate from user_progress table
+    console.log('[/api/stats] RPC failed, using fallback:', error?.message)
+
     const today = new Date().toISOString().split('T')[0]
-    const { data: activeData } = await supabase
+    const { data: progressData } = await supabase
       .from('user_progress')
-      .select('user_id, completed_at, quiz_completed_at')
+      .select('user_id, completed, completed_at, quiz_completed_at')
 
+    // Count unique users
+    const uniqueUsers = new Set((progressData || []).map(r => r.user_id))
+    const totalUsers = uniqueUsers.size
+
+    // Count active today
     const activeToday = new Set(
-      (activeData || []).filter(row => {
+      (progressData || []).filter(row => {
         const completedDate = row.completed_at?.split('T')[0]
         const quizDate = row.quiz_completed_at?.split('T')[0]
         return completedDate === today || quizDate === today
@@ -45,11 +57,6 @@ export async function GET() {
     ).size
 
     // Calculate average completion percentage
-    const { data: progressData } = await supabase
-      .from('user_progress')
-      .select('user_id, completed')
-
-    // Group by user and calculate percentage
     const userProgress: Record<string, number> = {}
     for (const row of progressData || []) {
       if (!userProgress[row.user_id]) {
@@ -68,7 +75,7 @@ export async function GET() {
       : 0
 
     return NextResponse.json({
-      total_users: userIds.length || totalUsers || 0,
+      total_users: totalUsers,
       active_users_today: activeToday,
       avg_completion_percentage: avgPct,
     })
