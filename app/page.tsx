@@ -143,10 +143,15 @@ export default function Home() {
           <h2 className="text-2xl font-semibold text-foreground mb-2">
             {isRegistering ? 'Skapa konto' : 'Logga in'}
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-2">
             {isRegistering
-              ? 'Registrera dig med din Curago-e-post'
-              : 'Ange din Curago-e-post och lösenord'}
+              ? 'Använd din Curago-e-post och skapa ett nytt lösenord'
+              : 'Ange din Curago-e-post och det lösenord du skapade här'}
+          </p>
+          <p className="text-xs text-muted-foreground mb-6">
+            {isRegistering
+              ? 'OBS: Detta är inte ditt M365-lösenord – skapa ett eget lösenord för utbildningsportalen.'
+              : 'OBS: Använd lösenordet du skapade här, inte ditt M365-lösenord.'}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -162,24 +167,31 @@ export default function Home() {
               />
             </div>
 
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Lösenord"
-                className="w-full pl-10 pr-12 py-3 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
-                required
-                minLength={6}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
+            <div>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={isRegistering ? 'Skapa ett nytt lösenord' : 'Lösenord'}
+                  className="w-full pl-10 pr-12 py-3 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
+                  required
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+              {isRegistering && (
+                <p className="text-xs text-muted-foreground mt-1.5 ml-1">
+                  Minst 6 tecken
+                </p>
+              )}
             </div>
 
             <button
