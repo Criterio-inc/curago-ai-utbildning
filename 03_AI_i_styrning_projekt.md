@@ -148,7 +148,7 @@ Skapa tre scenarier:
 
 För varje scenario:
 - Beskriv situationen (3-4 meningar)
-- Konsekvenser för tid, kostnad, kvalitet
+- Konsekvenser för tid, kostnad, kvalitet, nytta
 - Vilka beslut bör vi ta annorlunda?
 ```
 
