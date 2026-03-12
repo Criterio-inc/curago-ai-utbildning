@@ -63,6 +63,39 @@ export async function signIn(email: string, password: string): Promise<{ success
   return { success: true }
 }
 
+// Send password reset email
+export async function resetPassword(email: string): Promise<{ success: boolean; error?: string }> {
+  if (!isEmailAllowed(email)) {
+    return {
+      success: false,
+      error: `Endast e-postadresser med @${ALLOWED_DOMAIN} kan använda denna tjänst.`
+    }
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email.toLowerCase(), {
+    redirectTo: `${window.location.origin}/reset-password`
+  })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}
+
+// Update password (used after reset link clicked)
+export async function updatePassword(newPassword: string): Promise<{ success: boolean; error?: string }> {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword
+  })
+
+  if (error) {
+    return { success: false, error: error.message }
+  }
+
+  return { success: true }
+}
+
 // Get current user
 export async function getCurrentUser() {
   const { data: { user } } = await supabase.auth.getUser()
