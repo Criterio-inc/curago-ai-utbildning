@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Users, TrendingUp, CheckCircle, Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react'
-import { supabase, signIn, signUp, isEmailAllowed } from '@/lib/supabase'
+import { supabase, signIn, signUp, resetPassword, isEmailAllowed } from '@/lib/supabase'
 import CuragoLogo from '@/components/CuragoLogo'
 import ThemeToggle from '@/components/ThemeToggle'
 
@@ -13,6 +13,7 @@ export default function Home() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isRegistering, setIsRegistering] = useState(false)
+  const [isForgotPassword, setIsForgotPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
   const [checkingAuth, setCheckingAuth] = useState(true)
@@ -66,6 +67,23 @@ export default function Home() {
         type: 'error',
         text: 'Endast e-postadresser med @curago.se kan använda denna tjänst.'
       })
+      setLoading(false)
+      return
+    }
+
+    if (isForgotPassword) {
+      const result = await resetPassword(email)
+      if (result.success) {
+        setMessage({
+          type: 'success',
+          text: 'Ett e-postmeddelande med återställningslänk har skickats till din inbox.'
+        })
+      } else {
+        setMessage({
+          type: 'error',
+          text: result.error || 'Något gick fel. Försök igen.'
+        })
+      }
       setLoading(false)
       return
     }
@@ -141,18 +159,23 @@ export default function Home() {
         {/* Login/Register Form */}
         <div className="max-w-md mx-auto bg-card rounded-2xl shadow-lg border border-border p-8">
           <h2 className="text-2xl font-semibold text-foreground mb-2">
-            {isRegistering ? 'Skapa konto' : 'Logga in'}
+            {isForgotPassword ? 'Återställ lösenord' : isRegistering ? 'Skapa konto' : 'Logga in'}
           </h2>
           <p className="text-muted-foreground mb-2">
-            {isRegistering
+            {isForgotPassword
+              ? 'Ange din Curago-e-post så skickar vi en återställningslänk'
+              : isRegistering
               ? 'Använd din Curago-e-post och skapa ett nytt lösenord'
               : 'Ange din Curago-e-post och det lösenord du skapade här'}
           </p>
-          <p className="text-xs text-muted-foreground mb-6">
-            {isRegistering
-              ? 'OBS: Detta är inte ditt M365-lösenord – skapa ett eget lösenord för utbildningsportalen.'
-              : 'OBS: Använd lösenordet du skapade här, inte ditt M365-lösenord.'}
-          </p>
+          {!isForgotPassword && (
+            <p className="text-xs text-muted-foreground mb-6">
+              {isRegistering
+                ? 'OBS: Detta är inte ditt M365-lösenord – skapa ett eget lösenord för utbildningsportalen.'
+                : 'OBS: Använd lösenordet du skapade här, inte ditt M365-lösenord.'}
+            </p>
+          )}
+          {isForgotPassword && <div className="mb-6" />}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="relative">
@@ -167,32 +190,34 @@ export default function Home() {
               />
             </div>
 
-            <div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={isRegistering ? 'Skapa ett nytt lösenord' : 'Lösenord'}
-                  className="w-full pl-10 pr-12 py-3 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
-                  required
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+            {!isForgotPassword && (
+              <div>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={isRegistering ? 'Skapa ett nytt lösenord' : 'Lösenord'}
+                    className="w-full pl-10 pr-12 py-3 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
+                    required
+                    minLength={6}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {isRegistering && (
+                  <p className="text-xs text-muted-foreground mt-1.5 ml-1">
+                    Minst 6 tecken
+                  </p>
+                )}
               </div>
-              {isRegistering && (
-                <p className="text-xs text-muted-foreground mt-1.5 ml-1">
-                  Minst 6 tecken
-                </p>
-              )}
-            </div>
+            )}
 
             <button
               type="submit"
@@ -202,11 +227,11 @@ export default function Home() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  {isRegistering ? 'Skapar konto...' : 'Loggar in...'}
+                  {isForgotPassword ? 'Skickar...' : isRegistering ? 'Skapar konto...' : 'Loggar in...'}
                 </>
               ) : (
                 <>
-                  {isRegistering ? 'Skapa konto' : 'Logga in'}
+                  {isForgotPassword ? 'Skicka återställningslänk' : isRegistering ? 'Skapa konto' : 'Logga in'}
                   <ArrowRight className="w-5 h-5" />
                 </>
               )}
@@ -223,18 +248,35 @@ export default function Home() {
             </div>
           )}
 
-          <div className="mt-6 pt-6 border-t border-border">
+          <div className="mt-6 pt-6 border-t border-border space-y-2">
+            {!isRegistering && !isForgotPassword && (
+              <p className="text-sm text-muted-foreground">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsForgotPassword(true)
+                    setMessage(null)
+                    setPassword('')
+                  }}
+                  className="text-primary hover:underline font-medium"
+                >
+                  Glömt lösenord?
+                </button>
+              </p>
+            )}
             <p className="text-sm text-muted-foreground">
-              {isRegistering ? 'Har du redan ett konto?' : 'Har du inget konto?'}
+              {isForgotPassword ? 'Kom du ihåg lösenordet?' : isRegistering ? 'Har du redan ett konto?' : 'Har du inget konto?'}
               <button
                 type="button"
                 onClick={() => {
-                  setIsRegistering(!isRegistering)
+                  setIsForgotPassword(false)
+                  setIsRegistering(isForgotPassword ? false : !isRegistering)
                   setMessage(null)
+                  setPassword('')
                 }}
                 className="ml-1 text-primary hover:underline font-medium"
               >
-                {isRegistering ? 'Logga in' : 'Skapa konto'}
+                {isForgotPassword ? 'Logga in' : isRegistering ? 'Logga in' : 'Skapa konto'}
               </button>
             </p>
           </div>
