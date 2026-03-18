@@ -69,7 +69,7 @@ Tre faktorer samverkar:
 |--------|------------|
 | **Tillgänglighet** | Kräver inga tekniska förkunskaper – naturligt språk räcker |
 | **Bredd** | Samma verktyg fungerar för text, analys, kod, idégenerering |
-| **Omedelbärhet** | Svar på sekunder istället för timmar eller dagar |
+| **Omedelbarhet** | Svar på sekunder istället för timmar eller dagar |
 
 **Varför nu?**
 - Beräkningskraft har blivit billigare
